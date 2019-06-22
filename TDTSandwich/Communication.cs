@@ -20,7 +20,7 @@ namespace TDTSandwich
   {
     // Default settings for sending commands
     private const int DEFAULT_COMMAND_MAXATTEMPTS = 1;    // The default max number of times to attempt a command.
-    private const int DEFAULT_COMMAND_RESPONSETIMEOUT = 1500; // The default duration (ms) for a sent message to be considered as unreceived.
+    private const int DEFAULT_COMMAND_RESPONSETIMEOUT = 1000; // The default duration (ms) for a sent message to be considered as unreceived.
 
     // Codes sent during communication with Arduino
     public const string SERIAL_CMD_START = "^";
@@ -97,8 +97,11 @@ namespace TDTSandwich
      * ******************************/
     public delegate void HandleNewReadingsCallback(string heater1T, string heater2T, bool sampleTAvailable, string sampleT = "");
     public delegate void UpdateControlsCallback();
+    public delegate void UpdateControlsCallbackArg(int param1);
 
     private HandleNewReadingsCallback HandleNewReadings;
+    private UpdateControlsCallbackArg HandleStartDAQ_checkSandwichID;
+    private UpdateControlsCallback HandleStartDAQ_wrongDevice;
     private UpdateControlsCallback HandleStartDAQSuccess;
     private UpdateControlsCallback HandleStartDAQFail;
     private UpdateControlsCallback HandleStopDAQSuccess;
@@ -114,6 +117,8 @@ namespace TDTSandwich
 
     public Communication(Sandwich parentSandwich, ErrorLogger errorLogger,
                     HandleNewReadingsCallback HandleNewReadingsFunc,
+                    UpdateControlsCallbackArg HandleStartDAQ_checkSandwichIDFunc,
+                    UpdateControlsCallback HandleStartDAQ_wrongDeviceFunc,
                     UpdateControlsCallback HandleStartDAQSuccessFunc,
                     UpdateControlsCallback HandleStartDAQFailFunc,
                     UpdateControlsCallback HandleStopDAQSuccessFunc,
@@ -137,6 +142,8 @@ namespace TDTSandwich
 
       // Assign the callback functions
       HandleNewReadings = new HandleNewReadingsCallback(HandleNewReadingsFunc);
+      HandleStartDAQ_checkSandwichID = new UpdateControlsCallbackArg(HandleStartDAQ_checkSandwichIDFunc);
+      HandleStartDAQ_wrongDevice = new UpdateControlsCallback(HandleStartDAQ_wrongDeviceFunc);
       HandleStartDAQSuccess = new UpdateControlsCallback(HandleStartDAQSuccessFunc);
       HandleStartDAQFail = new UpdateControlsCallback(HandleStartDAQFailFunc);
       HandleStopDAQSuccess = new UpdateControlsCallback(HandleStopDAQSuccessFunc);
@@ -200,273 +207,304 @@ namespace TDTSandwich
      ************************************/
     public void handleSerialDataReceived(object sender, SerialDataReceivedEventArgs e)
     {
-      try
+      while (port_.BytesToRead > 0)
       {
-        string readBuffer = port_.ReadTo(SERIAL_REPLY_EOL);
-
-        // Check if the start and end of the response have the correct flags
-        if (readBuffer.Substring(0, 1) == SERIAL_REPLY_START && readBuffer.Substring(readBuffer.Length - 1, 1) == SERIAL_REPLY_END)
+        try
         {
-          int startPos = readBuffer.IndexOf(SERIAL_REPLY_START);
-          int endPos = readBuffer.LastIndexOf(SERIAL_REPLY_END);
+          string readBuffer = port_.ReadTo(SERIAL_REPLY_EOL);
 
-          // System.Diagnostics.Debug.WriteLine("Received reply: " + readBuffer);
-
-          string[] bufferFragments = extractReplyFragments(readBuffer, startPos, endPos);
-
-          // The first fragment is the command type
-          switch (bufferFragments[0])
+          // Check if the start and end of the response have the correct flags
+          if (readBuffer.Substring(0, 1) == SERIAL_REPLY_START && readBuffer.Substring(readBuffer.Length - 1, 1) == SERIAL_REPLY_END)
           {
-            case SERIAL_REPLY_CMDRESPONSE:
-              {
-                /**********************************
-                *     RESPONSE TO COMMAND        *
-                * *******************************/
-                /* Arduino's response to a received command
-                * Format:
-                * ^r|[commandID]|[executedCommandType]|[succ/fail]@
-                * where    ^               is SERIAL_REPLY_START
-                *          r               is SERIAL_REPLY_CMDRESPONSE
-                *          |               is SERIAL_REPLY_SEPARATOR
-                *          [commandID]     is the ID for the command
-                *          [executedCommandType]   is the type of command sent by C# program (e.g. SERIAL_CMD_STATE_ACQUISITION)
-                *          [succ/fail]     is SERIAL_REPLY_CMDRESPONSE_SUCCESS or SERIAL_REPLY_CMDRESPONSE_FAIL
-                *          @               is SERIAL_REPLY_END
-                */
+            int startPos = readBuffer.IndexOf(SERIAL_REPLY_START);
+            int endPos = readBuffer.LastIndexOf(SERIAL_REPLY_END);
 
-                // System.Diagnostics.Debug.WriteLine("Received command confirmation: " + readBuffer);
+            // System.Diagnostics.Debug.WriteLine("Received reply: " + readBuffer);
 
-                // Sanity check for number of fragments
-                if (bufferFragments.Length == 4)
+            string[] bufferFragments = extractReplyFragments(readBuffer, startPos, endPos);
+
+            // The first fragment is the command type
+            switch (bufferFragments[0])
+            {
+              case SERIAL_REPLY_CONNECTION:
                 {
-                  int commandID = Convert.ToInt32(bufferFragments[1]);
-                  string executedCommandType = bufferFragments[2];
-                  bool executionSuccess = false;
-
-                  // Get the status of command execution, and also check if this is corrupted.
-                  if (bufferFragments[3].Equals(SERIAL_REPLY_CMDRESPONSE_SUCC))
+                  /*********************************
+                  *     CONNECTION CHECK & ID      *
+                  * *******************************/
+                  /* Sandwich is replying to a connection check request. This should only
+                  * be used for connection check before starting DAQ, not for other purposes.
+                  * Format:
+                  * ^w|[sandwichID]@
+                  * where    ^              is SERIAL_REPLY_START
+                  *          b              is SERIAL_REPLY_CONNECTION
+                  *          |              is SERIAL_REPLY_SEPARATOR
+                  *          [sandwichID]   is the ID of the sandwich
+                  *          @              is SERIAL_REPLY_END
+                  */
+                  
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 2)
                   {
-                    executionSuccess = true;
+                    HandleStartDAQ_checkSandwichID(Convert.ToInt32(bufferFragments[1]));
                   }
-                  else if (bufferFragments[3].Equals(SERIAL_REPLY_CMDRESPONSE_FAIL))
-                  {
-                    executionSuccess = false;
-                  }
-
-                  // Check if the executed command type is one of the known ones, or corrupted.
-                  switch (executedCommandType)
-                  {
-                    case SERIAL_CMD_DAQ_START_HEATER:
-                    case SERIAL_CMD_DAQ_START_SAMPLE:
-                    case SERIAL_CMD_DAQ_STOP:
-                    case SERIAL_CMD_HEAT_START:
-                    case SERIAL_CMD_HEAT_STOP:
-                    case SERIAL_CMD_BLINK:
-                      // One of the valid command types; Add to queue for processing this completed command
-                      if (executionSuccess)
-                      {
-                        commandsIn_.Enqueue(new IncomingMessage(commandID, IncomingMessage.COMMAND_STATUS_SUCC));
-                      }
-                      else
-                      {
-                        commandsIn_.Enqueue(new IncomingMessage(commandID, IncomingMessage.COMMAND_STATUS_FAIL));
-                      }
-                      break;
-                    default:
-                      // Unrecognized command type, consider as corrupted.
-                      // Log error and return function
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CMDRESPONSE", readBuffer);
-                      return;
+                  else
+                  {// Somehow, number of parameters is wrong.
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CONNECTION", readBuffer);
+                    HandleStartDAQ_wrongDevice();
                   }
                 }
-                else
-                {// Somehow, number of parameters is wrong.
-                  errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CMDRESPONSE", readBuffer);
-                }
-              }
-              break;
-            case SERIAL_SEND_TEMP_HEATER:
-              {
-                /*********************************
-                *     TEMPERATURE READINGS       *
-                * *******************************/
-                /* Temperature reading of both heaters.
-                * Format:
-                * ^t|[heaterID]|[heater2T]@
-                * where    ^              is SERIAL_REPLY_START
-                *          t              is SERIAL_SEND_TEMP_HEATER
-                *          |              is SERIAL_REPLY_SEPARATOR
-                *          [heater1T]     is the temperature of heater 1
-                *          [heater2T]     is the temperature of heater 2
-                *          @              is SERIAL_REPLY_END
-                */
-
-                // Sanity check for number of fragments
-                if (bufferFragments.Length == 3)
+                break;
+              case SERIAL_REPLY_CMDRESPONSE:
                 {
-                  HandleNewReadings(bufferFragments[1],
-                                    bufferFragments[2],
-                                    false);
-                }
-                else
-                {// Somehow, number of parameters is wrong.
-                  errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_SEND_TEMP_HEATER", readBuffer);
-                }
-              }
-              break;
-            case SERIAL_SEND_TEMP_HEATERSAMPLE:
-              {
-                /*********************************
-                *     TEMPERATURE READINGS       *
-                * *******************************/
-                /* Temperature reading of both heaters and the sample.
-                * Format:
-                * ^b|[heaterID]|[heater2T]|[sampleT]@
-                * where    ^              is SERIAL_REPLY_START
-                *          b              is SERIAL_SEND_TEMP_HEATERSAMPLE
-                *          |              is SERIAL_REPLY_SEPARATOR
-                *          [heater1T]     is the temperature of heater 1
-                *          [heater2T]     is the temperature of heater 2
-                *          [sampleT]      is the temperature of the sample
-                *          @              is SERIAL_REPLY_END
-                */
+                  /**********************************
+                  *     RESPONSE TO COMMAND        *
+                  * *******************************/
+                  /* Arduino's response to a received command
+                  * Format:
+                  * ^r|[commandID]|[executedCommandType]|[succ/fail]@
+                  * where    ^               is SERIAL_REPLY_START
+                  *          r               is SERIAL_REPLY_CMDRESPONSE
+                  *          |               is SERIAL_REPLY_SEPARATOR
+                  *          [commandID]     is the ID for the command
+                  *          [executedCommandType]   is the type of command sent by C# program (e.g. SERIAL_CMD_STATE_ACQUISITION)
+                  *          [succ/fail]     is SERIAL_REPLY_CMDRESPONSE_SUCCESS or SERIAL_REPLY_CMDRESPONSE_FAIL
+                  *          @               is SERIAL_REPLY_END
+                  */
 
-                // Sanity check for number of fragments
-                if (bufferFragments.Length == 4)
-                {
-                  HandleNewReadings(bufferFragments[1],
-                                    bufferFragments[2],
-                                    true,
-                                    bufferFragments[3] );
-                }
-                else
-                {// Somehow, number of parameters is wrong.
-                  errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_SEND_TEMP_HEATERSAMPLE", readBuffer);
-                }
-              }
-              break;
-            case SERIAL_SEND_TEMP_HEATINGDONE:
-              {
-                /***************************************
-                * The duration of heating is completed *
-                * *************************************/
-                /* Calculated scale factor based on the calibration weight
-                * Format:
-                * ^c@
-                * where    ^               is SERIAL_REPLY_START
-                *          c               is SERIAL_SEND_TEMP_HEATINGDONE
-                *          @               is SERIAL_REPLY_END
-                */
-                // Update controls to reflect completion of heating
-                HandleHeatingComplete();
-              }
-              break;
-            case SERIAL_REPLY_ERROR:
-              {
-                /*********************************
-                *               ERROR            *
-                * *******************************/
-                /* An error occured while Arduino was performing an operation
-                * Format:
-                * ^e|[deviceID]|[errorCode]@
-                * where    ^               is SERIAL_REPLY_START
-                *          e               is SERIAL_REPLY_ERROR
-                *          |               is SERIAL_REPLY_SEPARATOR
-                *          [deviceID]      is the ID of the implicated device
-                *          [errorCode]     is the error code
-                *          @               is SERIAL_REPLY_END
-                */
+                  // System.Diagnostics.Debug.WriteLine("Received command confirmation: " + readBuffer);
 
-                // Sanity check for number of fragments
-                if (bufferFragments.Length == 3)
-                {
-                  ushort deviceID = Convert.ToUInt16(bufferFragments[1]);
-                  ushort errorCode = Convert.ToUInt16(bufferFragments[2]);
-
-                  // All Arduino errors are handled by the ErrorLogger class
-                  errorLogger_.logArduinoError(errorCode, parentSandwich_.getSandwichID(), deviceID, "handleSerialDataReceived, SERIAL_REPLY_ERROR");
-                }
-                else
-                {
-                  errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_ERROR", readBuffer);
-                }
-              }
-              break;
-            case SERIAL_REPLY_CORRUPTCMD:
-              {
-                /*********************************
-                *        INVALID COMMAND         *
-                * *******************************/
-                /* Arduino received a command which doesn't follow the communication standards
-                * Format:
-                * ^x|[commandType]@
-                * where    ^               is SERIAL_REPLY_START
-                *          x               is SERIAL_REPLY_CORRUPTCMD
-                *          |               is SERIAL_REPLY_SEPARATOR
-                *          [corruptionType]is the type of corruption detected in the command received by Arduino
-                *          @               is SERIAL_REPLY_END
-                */
-
-                // Sanity check for number of fragments
-                if (bufferFragments.Length == 2)
-                {
-                  // Sanity check for number of parameters
-                  switch (bufferFragments[1])
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 4)
                   {
-                    case SERIAL_REPLY_CORRUPTCMD_START:
-                      // The command string does not have a start flag
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_START, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    case SERIAL_REPLY_CORRUPTCMD_END:
-                      // The command string does not have an end flag
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_END, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    case SERIAL_REPLY_CORRUPTCMD_UNKNOWNCMD:
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_UNKNOWNCMD, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    case SERIAL_REPLY_CORRUPTCMD_PARAM_LESS:
-                      // There are fewer params in a command line than expected
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_LESS, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    case SERIAL_REPLY_CORRUPTCMD_PARAM_MORE:
-                      // There are more params in a command line than expected
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_MORE, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    case SERIAL_REPLY_CORRUPTCMD_PARAM_NONE:
-                      // There are no params in a command line, even though some are expected
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_NONE, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
-                      break;
-                    default:
-                      // All Arduino errors are handled by the ErrorLogger class
-                      errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_UNKNOWN, "handleSerialDataReceived, SERIAL_REPLY_ERROR", readBuffer);
-                      break;
+                    int commandID = Convert.ToInt32(bufferFragments[1]);
+                    string executedCommandType = bufferFragments[2];
+                    bool executionSuccess = false;
+
+                    // Get the status of command execution, and also check if this is corrupted.
+                    if (bufferFragments[3].Equals(SERIAL_REPLY_CMDRESPONSE_SUCC))
+                    {
+                      executionSuccess = true;
+                    }
+                    else if (bufferFragments[3].Equals(SERIAL_REPLY_CMDRESPONSE_FAIL))
+                    {
+                      executionSuccess = false;
+                    }
+
+                    // Check if the executed command type is one of the known ones, or corrupted.
+                    switch (executedCommandType)
+                    {
+                      case SERIAL_CMD_DAQ_START_HEATER:
+                      case SERIAL_CMD_DAQ_START_SAMPLE:
+                      case SERIAL_CMD_DAQ_STOP:
+                      case SERIAL_CMD_HEAT_START:
+                      case SERIAL_CMD_HEAT_STOP:
+                      case SERIAL_CMD_BLINK:
+                        // One of the valid command types; Add to queue for processing this completed command
+                        if (executionSuccess)
+                        {
+                          commandsIn_.Enqueue(new IncomingMessage(commandID, IncomingMessage.COMMAND_STATUS_SUCC));
+                        }
+                        else
+                        {
+                          commandsIn_.Enqueue(new IncomingMessage(commandID, IncomingMessage.COMMAND_STATUS_FAIL));
+                        }
+                        break;
+                      default:
+                        // Unrecognized command type, consider as corrupted.
+                        // Log error and return function
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CMDRESPONSE", readBuffer);
+                        return;
+                    }
+                  }
+                  else
+                  {// Somehow, number of parameters is wrong.
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CMDRESPONSE", readBuffer);
                   }
                 }
-                else
+                break;
+              case SERIAL_SEND_TEMP_HEATER:
                 {
-                  errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                  /*********************************
+                  *     TEMPERATURE READINGS       *
+                  * *******************************/
+                  /* Temperature reading of both heaters.
+                  * Format:
+                  * ^t|[heaterID]|[heater2T]@
+                  * where    ^              is SERIAL_REPLY_START
+                  *          t              is SERIAL_SEND_TEMP_HEATER
+                  *          |              is SERIAL_REPLY_SEPARATOR
+                  *          [heater1T]     is the temperature of heater 1
+                  *          [heater2T]     is the temperature of heater 2
+                  *          @              is SERIAL_REPLY_END
+                  */
+
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 3)
+                  {
+                    HandleNewReadings(bufferFragments[1],
+                                      bufferFragments[2],
+                                      false);
+                  }
+                  else
+                  {// Somehow, number of parameters is wrong.
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_SEND_TEMP_HEATER", readBuffer);
+                  }
                 }
-              }
-              break;
-            default:
-              // The reply sent from Arduino doesn't comply with any of the defined formats, so assume it is corrupted.
-              errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, Unknown command", readBuffer);
-              break;
+                break;
+              case SERIAL_SEND_TEMP_HEATERSAMPLE:
+                {
+                  /*********************************
+                  *     TEMPERATURE READINGS       *
+                  * *******************************/
+                  /* Temperature reading of both heaters and the sample.
+                  * Format:
+                  * ^b|[heaterID]|[heater2T]|[sampleT]@
+                  * where    ^              is SERIAL_REPLY_START
+                  *          b              is SERIAL_SEND_TEMP_HEATERSAMPLE
+                  *          |              is SERIAL_REPLY_SEPARATOR
+                  *          [heater1T]     is the temperature of heater 1
+                  *          [heater2T]     is the temperature of heater 2
+                  *          [sampleT]      is the temperature of the sample
+                  *          @              is SERIAL_REPLY_END
+                  */
+
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 4)
+                  {
+                    HandleNewReadings(bufferFragments[1],
+                                      bufferFragments[2],
+                                      true,
+                                      bufferFragments[3]);
+                  }
+                  else
+                  {// Somehow, number of parameters is wrong.
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_SEND_TEMP_HEATERSAMPLE", readBuffer);
+                  }
+                }
+                break;
+              case SERIAL_SEND_TEMP_HEATINGDONE:
+                {
+                  /***************************************
+                  * The duration of heating is completed *
+                  * *************************************/
+                  /* Calculated scale factor based on the calibration weight
+                  * Format:
+                  * ^c@
+                  * where    ^               is SERIAL_REPLY_START
+                  *          c               is SERIAL_SEND_TEMP_HEATINGDONE
+                  *          @               is SERIAL_REPLY_END
+                  */
+                  // Update controls to reflect completion of heating
+                  HandleHeatingComplete();
+                }
+                break;
+              case SERIAL_REPLY_ERROR:
+                {
+                  /*********************************
+                  *               ERROR            *
+                  * *******************************/
+                  /* An error occured while Arduino was performing an operation
+                  * Format:
+                  * ^e|[deviceID]|[errorCode]@
+                  * where    ^               is SERIAL_REPLY_START
+                  *          e               is SERIAL_REPLY_ERROR
+                  *          |               is SERIAL_REPLY_SEPARATOR
+                  *          [deviceID]      is the ID of the implicated device
+                  *          [errorCode]     is the error code
+                  *          @               is SERIAL_REPLY_END
+                  */
+
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 3)
+                  {
+                    ushort deviceID = Convert.ToUInt16(bufferFragments[1]);
+                    ushort errorCode = Convert.ToUInt16(bufferFragments[2]);
+
+                    // All Arduino errors are handled by the ErrorLogger class
+                    errorLogger_.logArduinoError(errorCode, parentSandwich_.getSandwichID(), deviceID, "handleSerialDataReceived, SERIAL_REPLY_ERROR");
+                  }
+                  else
+                  {
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_ERROR", readBuffer);
+                  }
+                }
+                break;
+              case SERIAL_REPLY_CORRUPTCMD:
+                {
+                  /*********************************
+                  *        INVALID COMMAND         *
+                  * *******************************/
+                  /* Arduino received a command which doesn't follow the communication standards
+                  * Format:
+                  * ^x|[commandType]@
+                  * where    ^               is SERIAL_REPLY_START
+                  *          x               is SERIAL_REPLY_CORRUPTCMD
+                  *          |               is SERIAL_REPLY_SEPARATOR
+                  *          [corruptionType]is the type of corruption detected in the command received by Arduino
+                  *          @               is SERIAL_REPLY_END
+                  */
+
+                  // Sanity check for number of fragments
+                  if (bufferFragments.Length == 2)
+                  {
+                    // Sanity check for number of parameters
+                    switch (bufferFragments[1])
+                    {
+                      case SERIAL_REPLY_CORRUPTCMD_START:
+                        // The command string does not have a start flag
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_START, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      case SERIAL_REPLY_CORRUPTCMD_END:
+                        // The command string does not have an end flag
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_END, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      case SERIAL_REPLY_CORRUPTCMD_UNKNOWNCMD:
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_UNKNOWNCMD, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      case SERIAL_REPLY_CORRUPTCMD_PARAM_LESS:
+                        // There are fewer params in a command line than expected
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_LESS, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      case SERIAL_REPLY_CORRUPTCMD_PARAM_MORE:
+                        // There are more params in a command line than expected
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_MORE, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      case SERIAL_REPLY_CORRUPTCMD_PARAM_NONE:
+                        // There are no params in a command line, even though some are expected
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_PARAM_NONE, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                        break;
+                      default:
+                        // All Arduino errors are handled by the ErrorLogger class
+                        errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPTCMD_UNKNOWN, "handleSerialDataReceived, SERIAL_REPLY_ERROR", readBuffer);
+                        break;
+                    }
+                  }
+                  else
+                  {
+                    errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, SERIAL_REPLY_CORRUPTCMD", readBuffer);
+                  }
+                }
+                break;
+              default:
+                // The reply sent from Arduino doesn't comply with any of the defined formats, so assume it is corrupted.
+                errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, Unknown command", readBuffer);
+                break;
+            }
+          }
+          else
+          {
+            // The string sent from Arduino doesn't have the correct start and end flags, so assume it is corrupted.
+            errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, start & end flags", readBuffer);
           }
         }
-        else
+        catch (TimeoutException err)
         {
-          // The string sent from Arduino doesn't have the correct start and end flags, so assume it is corrupted.
-          errorLogger_.logCProgError(ErrorLogger.ERR_PROG_REPLY_CORRUPT, "handleSerialDataReceived, start & end flags", readBuffer);
+          errorLogger_.logCProgError(013, err, err.Message);
         }
-      }
-      catch (TimeoutException err)
-      {
-        errorLogger_.logCProgError(013, err, err.Message);
-      }
-      catch (Exception err)
-      {
-        errorLogger_.logUnknownError(err);
+        catch (Exception err)
+        {
+          errorLogger_.logUnknownError(err);
+        }
       }
     }
 
@@ -545,13 +583,21 @@ namespace TDTSandwich
               // (curCommandID_ + 1) by (maxCommandID_ + 1)
               curCommandID_ = (curCommandID_ + 1) % (maxCommandID_ + 1);
               outgoingMessage.commandID = curCommandID_;
+              string commandString;
 
-              // Combine the command, command ID, and command params into a single string, delimited by SERIAL_CMD_SEPARATOR
-              // Start off with the command type and command ID
-              string commandString = string.Format("{0}{1}{2}",
-                                                    outgoingMessage.commandType,
-                                                    SERIAL_CMD_SEPARATOR,
-                                                    outgoingMessage.commandID);
+              if (outgoingMessage.addCommandID)
+              {
+                // Combine the command, command ID, and command params into a single string, delimited by SERIAL_CMD_SEPARATOR
+                // Start off with the command type and command ID
+                commandString = string.Format("{0}{1}{2}",
+                                              outgoingMessage.commandType,
+                                              SERIAL_CMD_SEPARATOR,
+                                              outgoingMessage.commandID);
+              }
+              else
+              {// Special request to not add command ID into the outgoing command.
+                commandString = outgoingMessage.commandType;
+              }
 
               // Append command params, if any
               for (int i = 0; i < outgoingMessage.paramList.Length; i++)
@@ -683,6 +729,14 @@ namespace TDTSandwich
 
                     switch (commandType)
                     {
+                      case SERIAL_CMD_CONNECTION:
+                        /************************************************************
+                        *  Timed out while waiting for the device to verify that it
+                        *  is a sandwich. Only used when checking connection before
+                        *  starting DAQ.
+                        * **********************************************************/
+                        HandleStartDAQ_wrongDevice();
+                        break;
                       case SERIAL_CMD_DAQ_START_HEATER:
                       case SERIAL_CMD_DAQ_START_SAMPLE:
                         /************************************************************
@@ -808,6 +862,17 @@ namespace TDTSandwich
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Check if the device if a sandwich. The sandwich should also reply with its ID, which can be used for further ID verification.
+    // This function should only be used for checking connection before starting DAQ, because the code is written now such that
+    // upon receiving a reply from the sandwich for this command, the appropriate functions for starting or resetting DAQ will be called.
+    // Therefore, using this function for other purposes may start/reset DAQ thus causing strange behaviors.
+    public void QueueCommandConnection()
+    {
+      // Queue command
+      OutgoingMessage command = new OutgoingMessage(SERIAL_CMD_CONNECTION, new string[0], true, DEFAULT_COMMAND_RESPONSETIMEOUT, DEFAULT_COMMAND_MAXATTEMPTS, false);
+      commandsOut_.Enqueue(command);
+    }
 
     // Blink the alarm LED
     public void QueueCommandBlink()

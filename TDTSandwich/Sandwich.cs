@@ -20,7 +20,7 @@ namespace TDTSandwich
     private ErrorLogger     errorLogger_;
     private Communication   communications_;
 
-    private FlowLayoutPanel sandwich_;
+    private TableLayoutPanel sandwich_;
     // ID controls
     private GroupBox        ID_;
     private FlowLayoutPanel ID_flow_;
@@ -70,9 +70,9 @@ namespace TDTSandwich
     private Button          record_browse_;
     // Advanced controls
     private GroupBox        advanced_;
-    private Button          advanced_show_;
-    private FlowLayoutPanel advanced_flow_;
     private FlowLayoutPanel advanced_hiddenFlow_;
+    private Button          advanced_show_;
+    private TableLayoutPanel advanced_table_;
     private Button          advanced_hide_;
     private Button          advanced_blinkLED_;
     private FlowLayoutPanel advanced_thermocouple_;
@@ -88,18 +88,18 @@ namespace TDTSandwich
     private FlowLayoutPanel advanced_oversampling_;
     private Label           advanced_oversampling_label_;
     private ComboBox        advanced_oversampling_dropdown_;
-    private FlowLayoutPanel advanced_TStepDuration_;
-    private Label           advanced_TStepDuration_label_;
-    private NumericUpDown   advanced_TStepDuration_upDown_;
+    //private FlowLayoutPanel advanced_TStepDuration_;
+    //private Label           advanced_TStepDuration_label_;
+    //private NumericUpDown   advanced_TStepDuration_upDown_;
     private FlowLayoutPanel advanced_PID_proportional_;
     private Label           advanced_PID_proportional_label_;
     private NumericUpDown   advanced_PID_proportional_upDown_;
     private FlowLayoutPanel advanced_PID_integral_;
     private Label           advanced_PID_integral_label_;
     private NumericUpDown   advanced_PID_integral_upDown_;
-    private FlowLayoutPanel advanced_sampleOffset_;
-    private Label           advanced_sampleOffset_label_;
-    private NumericUpDown   advanced_sampleOffset_upDown_;
+    //private FlowLayoutPanel advanced_sampleOffset_;
+    //private Label           advanced_sampleOffset_label_;
+    //private NumericUpDown   advanced_sampleOffset_upDown_;
 
 
     private int sandwichHeight_;
@@ -128,6 +128,7 @@ namespace TDTSandwich
     private delegate void _suspendLayoutControlCallback(Control refControl);
     private delegate void _resumeLayoutControlCallback(Control refControl);
     private delegate void _performLayoutControlCallback(Control refControl);
+    private delegate void _changeButtonVisibilityCallback(Button button, bool visibility);
     private delegate void _changeFlowVisibilityCallback(FlowLayoutPanel flowPanel, bool visibility);
     private delegate void _changeControlEnableCallback(Control butControl, bool state);
     private delegate void _showControlCallback(Control refControl, Control parentControl);
@@ -156,7 +157,7 @@ namespace TDTSandwich
       heat_startHeat_ = new System.Windows.Forms.Button();
       advanced_thermocouple_dropdown_ = new System.Windows.Forms.ComboBox();
       advanced_blinkLED_ = new System.Windows.Forms.Button();
-      sandwich_ = new System.Windows.Forms.FlowLayoutPanel();
+      sandwich_ = new System.Windows.Forms.TableLayoutPanel();
       ID_ = new System.Windows.Forms.GroupBox();
       ID_flow_ = new System.Windows.Forms.FlowLayoutPanel();
       ID_textbox_ = new System.Windows.Forms.TextBox();
@@ -195,7 +196,7 @@ namespace TDTSandwich
       record_filepath_textbox_ = new System.Windows.Forms.TextBox();
       record_browse_ = new System.Windows.Forms.Button();
       advanced_ = new System.Windows.Forms.GroupBox();
-      advanced_flow_ = new System.Windows.Forms.FlowLayoutPanel();
+      advanced_table_ = new System.Windows.Forms.TableLayoutPanel();
       advanced_hiddenFlow_ = new System.Windows.Forms.FlowLayoutPanel();
       advanced_show_ = new System.Windows.Forms.Button();
       advanced_hide_ = new System.Windows.Forms.Button();
@@ -211,18 +212,18 @@ namespace TDTSandwich
       advanced_oversampling_ = new System.Windows.Forms.FlowLayoutPanel();
       advanced_oversampling_label_ = new System.Windows.Forms.Label();
       advanced_oversampling_dropdown_ = new System.Windows.Forms.ComboBox();
-      advanced_TStepDuration_ = new System.Windows.Forms.FlowLayoutPanel();
-      advanced_TStepDuration_label_ = new System.Windows.Forms.Label();
-      advanced_TStepDuration_upDown_ = new System.Windows.Forms.NumericUpDown();
+      //advanced_TStepDuration_ = new System.Windows.Forms.FlowLayoutPanel();
+      //advanced_TStepDuration_label_ = new System.Windows.Forms.Label();
+      //advanced_TStepDuration_upDown_ = new System.Windows.Forms.NumericUpDown();
       advanced_PID_proportional_ = new System.Windows.Forms.FlowLayoutPanel();
       advanced_PID_proportional_label_ = new System.Windows.Forms.Label();
       advanced_PID_proportional_upDown_ = new System.Windows.Forms.NumericUpDown();
       advanced_PID_integral_ = new System.Windows.Forms.FlowLayoutPanel();
       advanced_PID_integral_label_ = new System.Windows.Forms.Label();
       advanced_PID_integral_upDown_ = new System.Windows.Forms.NumericUpDown();
-      advanced_sampleOffset_ = new System.Windows.Forms.FlowLayoutPanel();
-      advanced_sampleOffset_label_ = new System.Windows.Forms.Label();
-      advanced_sampleOffset_upDown_ = new System.Windows.Forms.NumericUpDown();
+      //advanced_sampleOffset_ = new System.Windows.Forms.FlowLayoutPanel();
+      //advanced_sampleOffset_label_ = new System.Windows.Forms.Label();
+      //advanced_sampleOffset_upDown_ = new System.Windows.Forms.NumericUpDown();
       sandwich_.SuspendLayout();
       ID_.SuspendLayout();
       ID_flow_.SuspendLayout();
@@ -246,21 +247,21 @@ namespace TDTSandwich
       record_flow_.SuspendLayout();
       record_filepath_.SuspendLayout();
       advanced_.SuspendLayout();
-      advanced_flow_.SuspendLayout();
+      advanced_table_.SuspendLayout();
       advanced_hiddenFlow_.SuspendLayout();
       advanced_thermocouple_.SuspendLayout();
       advanced_port_.SuspendLayout();
       advanced_ID_.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(advanced_ID_upDown_)).BeginInit();
       advanced_oversampling_.SuspendLayout();
-      advanced_TStepDuration_.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(advanced_TStepDuration_upDown_)).BeginInit();
+      //advanced_TStepDuration_.SuspendLayout();
+      //((System.ComponentModel.ISupportInitialize)(advanced_TStepDuration_upDown_)).BeginInit();
       advanced_PID_proportional_.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(advanced_PID_proportional_upDown_)).BeginInit();
       advanced_PID_integral_.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(advanced_PID_integral_upDown_)).BeginInit();
-      advanced_sampleOffset_.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(advanced_sampleOffset_upDown_)).BeginInit();
+      //advanced_sampleOffset_.SuspendLayout();
+      //((System.ComponentModel.ISupportInitialize)(advanced_sampleOffset_upDown_)).BeginInit();
       mainFlowPanel_.SuspendLayout();
       owningForm_.SuspendLayout();
 
@@ -271,20 +272,42 @@ namespace TDTSandwich
       // 
       // Parent container for all the controls
       // 
+      /*
       sandwich_.Controls.Add(ID_);
       sandwich_.Controls.Add(DAQ_);
       sandwich_.Controls.Add(heat_);
       sandwich_.Controls.Add(record_);
       sandwich_.Controls.Add(advanced_);
-      sandwich_.Location = new System.Drawing.Point(0, 0); // Since we are adding to a flowLayoutPanel in a top-down direction, we do not have to worry about the exact location of the sandwich (it will be autocalculated)
-      sandwich_.Margin = new System.Windows.Forms.Padding(0);
-      sandwich_.Name = controlPrefix_;
-      //_sandwich.Size = new System.Drawing.Size(1966, 67);
-      sandwich_.Size = new System.Drawing.Size(2288, 67);
-      sandwich_.TabIndex = 12;
+      //sandwich_.Size = new System.Drawing.Size(2288, 67);
+      sandwich_.FlowDirection = FlowDirection.LeftToRight;
+      sandwich_.AutoSize = true;
+      sandwich_.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+      sandwich_.TabIndex = sandwichControlID_;
       // Add the sandwich and adjust the height of the main flowlayout panel
       mainFlowPanel_.Controls.Add(sandwich_);
       mainFlowPanel_.Size = new System.Drawing.Size(sandwich_.Size.Width, mainFlowPanel_.Size.Height + sandwichHeight_);
+      */
+      sandwich_.ColumnCount = 5;
+      sandwich_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      sandwich_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      sandwich_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      sandwich_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      sandwich_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      sandwich_.Controls.Add(ID_, 0, 0);
+      sandwich_.Controls.Add(DAQ_, 1, 0);
+      sandwich_.Controls.Add(heat_, 2, 0);
+      sandwich_.Controls.Add(record_, 3, 0);
+      sandwich_.Controls.Add(advanced_, 4, 0);
+      sandwich_.Location = new System.Drawing.Point(0, 0); // Since we are adding to a flowLayoutPanel in a top-down direction, we do not have to worry about the exact location of the sandwich (it will be autocalculated)
+      sandwich_.Margin = new System.Windows.Forms.Padding(0);
+      sandwich_.Name = controlPrefix_;
+      sandwich_.RowCount = 1;
+      sandwich_.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      sandwich_.Size = new System.Drawing.Size(0, 0);
+      sandwich_.AutoSize = true;
+      sandwich_.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      sandwich_.TabIndex = sandwichControlID_;
+      mainFlowPanel_.Controls.Add(sandwich_);
 
       ////////////////////////////////////
       //       ID
@@ -809,45 +832,66 @@ namespace TDTSandwich
       // 
       // advanced
       // 
-      advanced_.Controls.Add(advanced_flow_);
+      advanced_.Controls.Add(advanced_table_);
       advanced_.Location = new System.Drawing.Point(948, 0);
       advanced_.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
       advanced_.Name = controlPrefix_ + "_advanced";
-      //advanced_.Size = new System.Drawing.Size(1224, 66); // with error textbox
-      advanced_.Size = new System.Drawing.Size(828, 66);    // without error textbox
+      advanced_.AutoSize = true;
+      advanced_.AutoSizeMode = AutoSizeMode.GrowAndShrink;
       advanced_.TabIndex = 4;
       advanced_.TabStop = false;
       advanced_.Text = "Advanced";
+      advanced_.MinimumSize = new System.Drawing.Size(70, 0);
+      advanced_.MaximumSize = new System.Drawing.Size(0, 66);
       // 
-      // advanced_flow
+      // advanced_table
       // 
-      advanced_flow_.Controls.Add(advanced_show_);
-      advanced_flow_.Controls.Add(advanced_hiddenFlow_);
-      advanced_flow_.Location = new System.Drawing.Point(3, 13);
-      advanced_flow_.Name = controlPrefix_ + "_advanced_flow";
-      //advanced_flow_.Size = new System.Drawing.Size(1215, 52);  // with error textbox
-      advanced_flow_.Size = new System.Drawing.Size(819, 52);     // without error textbox
-      advanced_flow_.TabIndex = 1;
+      /*
+      advanced_table_.Controls.Add(advanced_show_);
+      advanced_table_.Controls.Add(advanced_hiddenFlow_);
+      advanced_table_.Location = new System.Drawing.Point(3, 13);
+      advanced_table_.Name = controlPrefix_ + "_advanced_table";
+      //advanced_table_.Size = new System.Drawing.Size(739, 52);
+      advanced_table_.AutoSize = true;
+      advanced_table_.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+      advanced_table_.TabIndex = 1;
+      */
+      advanced_table_.ColumnCount = 3;
+      advanced_table_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      advanced_table_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      advanced_table_.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+      advanced_table_.Controls.Add(advanced_hide_, 0, 0);
+      advanced_table_.Controls.Add(advanced_show_, 1, 0);
+      advanced_table_.Controls.Add(advanced_hiddenFlow_, 2, 0);
+      advanced_table_.Location = new System.Drawing.Point(3, 13);
+      advanced_table_.Margin = new System.Windows.Forms.Padding(0);
+      advanced_table_.Name = controlPrefix_ + "_advanced_table";
+      advanced_table_.RowCount = 1;
+      advanced_table_.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      advanced_table_.AutoSize = true;
+      advanced_table_.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      advanced_table_.Size = new System.Drawing.Size(0, 0);
+      advanced_table_.TabIndex = 1;
       // 
       // _advanced_hiddenFlow
       // 
-      advanced_hiddenFlow_.Controls.Add(advanced_hide_);
-      advanced_hiddenFlow_.Controls.Add(advanced_blinkLED_);
-      advanced_hiddenFlow_.Controls.Add(advanced_thermocouple_);
-      advanced_hiddenFlow_.Controls.Add(advanced_port_);
       advanced_hiddenFlow_.Controls.Add(advanced_ID_);
+      advanced_hiddenFlow_.Controls.Add(advanced_port_);
+      advanced_hiddenFlow_.Controls.Add(advanced_blinkLED_);
       advanced_hiddenFlow_.Controls.Add(advanced_removeSandwich_);
+      advanced_hiddenFlow_.Controls.Add(advanced_thermocouple_);
       advanced_hiddenFlow_.Controls.Add(advanced_oversampling_);
-      advanced_hiddenFlow_.Controls.Add(advanced_TStepDuration_);
+      //advanced_hiddenFlow_.Controls.Add(advanced_TStepDuration_);
       advanced_hiddenFlow_.Controls.Add(advanced_PID_proportional_);
       advanced_hiddenFlow_.Controls.Add(advanced_PID_integral_);
-      advanced_hiddenFlow_.Controls.Add(advanced_sampleOffset_);
+      //advanced_hiddenFlow_.Controls.Add(advanced_sampleOffset_);
       advanced_hiddenFlow_.Location = new System.Drawing.Point(0, 0);
       advanced_hiddenFlow_.Margin = new System.Windows.Forms.Padding(0);
       advanced_hiddenFlow_.Name = "_advanced_hiddenFlow";
-      //advanced_hiddenFlow_.Size = new System.Drawing.Size(1215, 52);  // with error textbox
-      advanced_hiddenFlow_.Size = new System.Drawing.Size(819, 52);     // without error textbox
-      advanced_hiddenFlow_.TabIndex = 2; ;
+      //advanced_hiddenFlow_.Size = new System.Drawing.Size(739, 52);
+      advanced_hiddenFlow_.AutoSize = true;
+      advanced_hiddenFlow_.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+      advanced_hiddenFlow_.TabIndex = 2;
       advanced_hiddenFlow_.Visible = false;
       // 
       // advanced_show
@@ -869,59 +913,41 @@ namespace TDTSandwich
       advanced_hide_.TabIndex = 2;
       advanced_hide_.Text = "Hide";
       advanced_hide_.UseVisualStyleBackColor = true;
+      advanced_hide_.Visible = false;
       // 
-      // advanced_blinkLED
+      // advanced_ID
       // 
-      advanced_blinkLED_.Location = new System.Drawing.Point(105, 11);
-      advanced_blinkLED_.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
-      advanced_blinkLED_.Name = controlPrefix_ + "_advanced_blinkLED";
-      advanced_blinkLED_.Size = new System.Drawing.Size(45, 35);
-      advanced_blinkLED_.TabIndex = 3;
-      advanced_blinkLED_.Text = "Blink LED";
-      advanced_blinkLED_.UseVisualStyleBackColor = true;
-      advanced_blinkLED_.Enabled = false;
+      advanced_ID_.Controls.Add(advanced_ID_label_);
+      advanced_ID_.Controls.Add(advanced_ID_upDown_);
+      advanced_ID_.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      advanced_ID_.Location = new System.Drawing.Point(301, 0);
+      advanced_ID_.Margin = new System.Windows.Forms.Padding(0);
+      advanced_ID_.Name = controlPrefix_ + "_advanced_ID";
+      advanced_ID_.Size = new System.Drawing.Size(40, 49);
+      advanced_ID_.TabIndex = 25;
       // 
-      // advanced_thermocouple
+      // advanced_ID_label
       // 
-      advanced_thermocouple_.Controls.Add(advanced_thermocouple_label_);
-      advanced_thermocouple_.Controls.Add(advanced_thermocouple_dropdown_);
-      advanced_thermocouple_.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      advanced_thermocouple_.Location = new System.Drawing.Point(153, 0);
-      advanced_thermocouple_.Margin = new System.Windows.Forms.Padding(0);
-      advanced_thermocouple_.Name = controlPrefix_ + "_advanced_thermocouple";
-      advanced_thermocouple_.Size = new System.Drawing.Size(84, 49);
-      advanced_thermocouple_.TabIndex = 23;
+      advanced_ID_label_.AutoSize = true;
+      advanced_ID_label_.Location = new System.Drawing.Point(3, 3);
+      advanced_ID_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+      advanced_ID_label_.Name = controlPrefix_ + "_advanced_ID_label";
+      advanced_ID_label_.Size = new System.Drawing.Size(18, 13);
+      advanced_ID_label_.TabIndex = 21;
+      advanced_ID_label_.Text = "ID";
       // 
-      // advanced_thermocouple_label
+      // advanced_ID_upDown
       // 
-      advanced_thermocouple_label_.AutoSize = true;
-      advanced_thermocouple_label_.Location = new System.Drawing.Point(3, 3);
-      advanced_thermocouple_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-      advanced_thermocouple_label_.Name = controlPrefix_ + "_advanced_thermocouple_label";
-      advanced_thermocouple_label_.Size = new System.Drawing.Size(75, 13);
-      advanced_thermocouple_label_.TabIndex = 18;
-      advanced_thermocouple_label_.Text = "Thermocouple\r\n";
-      // 
-      // advanced_thermocouple_dropdown
-      // 
-      advanced_thermocouple_dropdown_.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      advanced_thermocouple_dropdown_.FormattingEnabled = true;
-      advanced_thermocouple_dropdown_.Items.AddRange(new object[] {
-            "B",
-            "E",
-            "J",
-            "K",
-            "N",
-            "R",
-            "S",
-            "T"});
-      advanced_thermocouple_dropdown_.Location = new System.Drawing.Point(3, 19);
-      advanced_thermocouple_dropdown_.Name = controlPrefix_ + "_advanced_thermocouple_dropdown";
-      advanced_thermocouple_dropdown_.Size = new System.Drawing.Size(75, 21);
-      advanced_thermocouple_dropdown_.SelectedValue = "T"; // This sets the default value of the thermocouple type drop down list to T...
-      advanced_thermocouple_dropdown_.SelectedItem = "T"; // ...and this makes it display the value of T
-      advanced_thermocouple_dropdown_.TabIndex = 4;
-      advanced_thermocouple_dropdown_.Tag = "";
+      advanced_ID_upDown_.Location = new System.Drawing.Point(3, 19);
+      advanced_ID_upDown_.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+      advanced_ID_upDown_.Name = controlPrefix_ + "_advanced_ID_upDown";
+      advanced_ID_upDown_.Size = new System.Drawing.Size(37, 20);
+      advanced_ID_upDown_.Value = 0;
+      advanced_ID_upDown_.TabIndex = 6;
       // 
       // advanced_port
       // 
@@ -958,39 +984,16 @@ namespace TDTSandwich
       advanced_port_dropdown_.Size = new System.Drawing.Size(55, 21);
       advanced_port_dropdown_.TabIndex = 5;
       // 
-      // advanced_ID
+      // advanced_blinkLED
       // 
-      advanced_ID_.Controls.Add(advanced_ID_label_);
-      advanced_ID_.Controls.Add(advanced_ID_upDown_);
-      advanced_ID_.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      advanced_ID_.Location = new System.Drawing.Point(301, 0);
-      advanced_ID_.Margin = new System.Windows.Forms.Padding(0);
-      advanced_ID_.Name = controlPrefix_ + "_advanced_ID";
-      advanced_ID_.Size = new System.Drawing.Size(40, 49);
-      advanced_ID_.TabIndex = 25;
-      // 
-      // advanced_ID_label
-      // 
-      advanced_ID_label_.AutoSize = true;
-      advanced_ID_label_.Location = new System.Drawing.Point(3, 3);
-      advanced_ID_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-      advanced_ID_label_.Name = controlPrefix_ + "_advanced_ID_label";
-      advanced_ID_label_.Size = new System.Drawing.Size(18, 13);
-      advanced_ID_label_.TabIndex = 21;
-      advanced_ID_label_.Text = "ID";
-      // 
-      // advanced_ID_upDown
-      // 
-      advanced_ID_upDown_.Location = new System.Drawing.Point(3, 19);
-      advanced_ID_upDown_.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-      advanced_ID_upDown_.Name = controlPrefix_ + "_advanced_ID_upDown";
-      advanced_ID_upDown_.Size = new System.Drawing.Size(37, 20);
-      advanced_ID_upDown_.Value = 0;
-      advanced_ID_upDown_.TabIndex = 6;
+      advanced_blinkLED_.Location = new System.Drawing.Point(105, 11);
+      advanced_blinkLED_.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
+      advanced_blinkLED_.Name = controlPrefix_ + "_advanced_blinkLED";
+      advanced_blinkLED_.Size = new System.Drawing.Size(45, 35);
+      advanced_blinkLED_.TabIndex = 3;
+      advanced_blinkLED_.Text = "Blink LED";
+      advanced_blinkLED_.UseVisualStyleBackColor = true;
+      advanced_blinkLED_.Enabled = false;
       // 
       // _advanced_removeSandwich
       //
@@ -1038,7 +1041,48 @@ namespace TDTSandwich
       _advanced_PID_radius_upDown.TabIndex = 8;
       _advanced_PID_radius_upDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       */
-
+      // 
+      // advanced_thermocouple
+      // 
+      advanced_thermocouple_.Controls.Add(advanced_thermocouple_label_);
+      advanced_thermocouple_.Controls.Add(advanced_thermocouple_dropdown_);
+      advanced_thermocouple_.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      advanced_thermocouple_.Location = new System.Drawing.Point(153, 0);
+      advanced_thermocouple_.Margin = new System.Windows.Forms.Padding(0);
+      advanced_thermocouple_.Name = controlPrefix_ + "_advanced_thermocouple";
+      advanced_thermocouple_.Size = new System.Drawing.Size(84, 49);
+      advanced_thermocouple_.TabIndex = 23;
+      // 
+      // advanced_thermocouple_label
+      // 
+      advanced_thermocouple_label_.AutoSize = true;
+      advanced_thermocouple_label_.Location = new System.Drawing.Point(3, 3);
+      advanced_thermocouple_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+      advanced_thermocouple_label_.Name = controlPrefix_ + "_advanced_thermocouple_label";
+      advanced_thermocouple_label_.Size = new System.Drawing.Size(75, 13);
+      advanced_thermocouple_label_.TabIndex = 18;
+      advanced_thermocouple_label_.Text = "Thermocouple\r\n";
+      // 
+      // advanced_thermocouple_dropdown
+      // 
+      advanced_thermocouple_dropdown_.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      advanced_thermocouple_dropdown_.FormattingEnabled = true;
+      advanced_thermocouple_dropdown_.Items.AddRange(new object[] {
+            "B",
+            "E",
+            "J",
+            "K",
+            "N",
+            "R",
+            "S",
+            "T"});
+      advanced_thermocouple_dropdown_.Location = new System.Drawing.Point(3, 19);
+      advanced_thermocouple_dropdown_.Name = controlPrefix_ + "_advanced_thermocouple_dropdown";
+      advanced_thermocouple_dropdown_.Size = new System.Drawing.Size(75, 21);
+      advanced_thermocouple_dropdown_.SelectedValue = "T"; // This sets the default value of the thermocouple type drop down list to T...
+      advanced_thermocouple_dropdown_.SelectedItem = "T"; // ...and this makes it display the value of T
+      advanced_thermocouple_dropdown_.TabIndex = 4;
+      advanced_thermocouple_dropdown_.Tag = "";
       // 
       // advanced_oversampling
       // 
@@ -1078,6 +1122,7 @@ namespace TDTSandwich
       advanced_oversampling_dropdown_.SelectedItem = 2; // ...and this makes it display the value of T
       advanced_oversampling_dropdown_.TabIndex = 8;
       advanced_oversampling_dropdown_.Tag = "";
+      /*
       // 
       // advanced_TStepDuration
       // 
@@ -1113,6 +1158,7 @@ namespace TDTSandwich
       advanced_TStepDuration_upDown_.Size = new System.Drawing.Size(77, 26);
       advanced_TStepDuration_upDown_.TabIndex = 9;
       advanced_TStepDuration_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      */
       // 
       // advanced_PID_proportional
       // 
@@ -1123,7 +1169,7 @@ namespace TDTSandwich
       advanced_PID_proportional_.Margin = new System.Windows.Forms.Padding(0);
       advanced_PID_proportional_.Name = controlPrefix_ + "_advanced_PID_proportional";
       advanced_PID_proportional_.Size = new System.Drawing.Size(80, 49);
-      advanced_PID_proportional_.TabIndex = 10;
+      advanced_PID_proportional_.TabIndex = 9;
       // 
       // advanced_PID_proportional_label
       // 
@@ -1132,7 +1178,7 @@ namespace TDTSandwich
       advanced_PID_proportional_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
       advanced_PID_proportional_label_.Name = controlPrefix_ + "_advanced_PID_proportional_label";
       advanced_PID_proportional_label_.Size = new System.Drawing.Size(66, 13);
-      advanced_PID_proportional_label_.TabIndex = 10;
+      advanced_PID_proportional_label_.TabIndex = 9;
       advanced_PID_proportional_label_.Text = "Proportional";
       // 
       // advanced_PID_proportional_upDown
@@ -1145,7 +1191,7 @@ namespace TDTSandwich
       advanced_PID_proportional_upDown_.Maximum = 9999.9999M;
       advanced_PID_proportional_upDown_.Name = controlPrefix_ + "_advanced_PID_proportional_upDown";
       advanced_PID_proportional_upDown_.Size = new System.Drawing.Size(77, 26);
-      advanced_PID_proportional_upDown_.TabIndex = 10;
+      advanced_PID_proportional_upDown_.TabIndex = 9;
       advanced_PID_proportional_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // advanced_PID_integral
@@ -1157,7 +1203,7 @@ namespace TDTSandwich
       advanced_PID_integral_.Margin = new System.Windows.Forms.Padding(0);
       advanced_PID_integral_.Name = controlPrefix_ + "_advanced_PID_integral";
       advanced_PID_integral_.Size = new System.Drawing.Size(80, 49);
-      advanced_PID_integral_.TabIndex = 11;
+      advanced_PID_integral_.TabIndex = 10;
       // 
       // advanced_PID_integral_label
       // 
@@ -1166,7 +1212,7 @@ namespace TDTSandwich
       advanced_PID_integral_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
       advanced_PID_integral_label_.Name = controlPrefix_ + "_advanced_PID_integral_label";
       advanced_PID_integral_label_.Size = new System.Drawing.Size(66, 13);
-      advanced_PID_integral_label_.TabIndex = 11;
+      advanced_PID_integral_label_.TabIndex = 10;
       advanced_PID_integral_label_.Text = "Integral";
       // 
       // advanced_PID_integral_upDown
@@ -1179,8 +1225,9 @@ namespace TDTSandwich
       advanced_PID_integral_upDown_.Maximum = 9999.9999M;
       advanced_PID_integral_upDown_.Name = controlPrefix_ + "_advanced_PID_integral_upDown";
       advanced_PID_integral_upDown_.Size = new System.Drawing.Size(77, 26);
-      advanced_PID_integral_upDown_.TabIndex = 11;
+      advanced_PID_integral_upDown_.TabIndex = 10;
       advanced_PID_integral_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      /*
       // 
       // advanced_sampleOffset
       // 
@@ -1191,7 +1238,7 @@ namespace TDTSandwich
       advanced_sampleOffset_.Margin = new System.Windows.Forms.Padding(0);
       advanced_sampleOffset_.Name = controlPrefix_ + "_advanced_sampleOffset";
       advanced_sampleOffset_.Size = new System.Drawing.Size(80, 49);
-      advanced_sampleOffset_.TabIndex = 9;
+      advanced_sampleOffset_.TabIndex = 11;
       // 
       // advanced_sampleOffset_label
       // 
@@ -1200,7 +1247,7 @@ namespace TDTSandwich
       advanced_sampleOffset_label_.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
       advanced_sampleOffset_label_.Name = controlPrefix_ + "_advanced_sampleOffset_label";
       advanced_sampleOffset_label_.Size = new System.Drawing.Size(71, 13);
-      advanced_sampleOffset_label_.TabIndex = 9;
+      advanced_sampleOffset_label_.TabIndex = 11;
       advanced_sampleOffset_label_.Text = "Sample offset";
       // 
       // advanced_sampleOffset_upDown
@@ -1214,8 +1261,9 @@ namespace TDTSandwich
       advanced_sampleOffset_upDown_.Value = 0.00M;   // Set a default value of 0
       advanced_sampleOffset_upDown_.Name = controlPrefix_ + "_advanced_sampleOffset_upDown";
       advanced_sampleOffset_upDown_.Size = new System.Drawing.Size(77, 20);
-      advanced_sampleOffset_upDown_.TabIndex = 9;
+      advanced_sampleOffset_upDown_.TabIndex = 11;
       advanced_sampleOffset_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      */
       /*
       // 
       // advanced_error
@@ -1284,7 +1332,8 @@ namespace TDTSandwich
       record_filepath_.ResumeLayout(false);
       record_filepath_.PerformLayout();
       advanced_.ResumeLayout(false);
-      advanced_flow_.ResumeLayout(false);
+      advanced_table_.ResumeLayout(false);
+      advanced_table_.PerformLayout();
       advanced_hiddenFlow_.ResumeLayout(false);
       advanced_thermocouple_.ResumeLayout(false);
       advanced_thermocouple_.PerformLayout();
@@ -1295,18 +1344,18 @@ namespace TDTSandwich
       ((System.ComponentModel.ISupportInitialize)(advanced_ID_upDown_)).EndInit();
       advanced_oversampling_.ResumeLayout(false);
       advanced_oversampling_.PerformLayout();
-      advanced_TStepDuration_.ResumeLayout(false);
-      advanced_TStepDuration_.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(advanced_TStepDuration_upDown_)).EndInit();
+      //advanced_TStepDuration_.ResumeLayout(false);
+      //advanced_TStepDuration_.PerformLayout();
+      //((System.ComponentModel.ISupportInitialize)(advanced_TStepDuration_upDown_)).EndInit();
       advanced_PID_proportional_.ResumeLayout(false);
       advanced_PID_proportional_.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(advanced_PID_proportional_upDown_)).EndInit();
       advanced_PID_integral_.ResumeLayout(false);
       advanced_PID_integral_.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(advanced_PID_integral_upDown_)).EndInit();
-      advanced_sampleOffset_.ResumeLayout(false);
-      advanced_sampleOffset_.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(advanced_sampleOffset_upDown_)).EndInit();
+      //advanced_sampleOffset_.ResumeLayout(false);
+      //advanced_sampleOffset_.PerformLayout();
+      //((System.ComponentModel.ISupportInitialize)(advanced_sampleOffset_upDown_)).EndInit();
       sandwich_.ResumeLayout(false);
       sandwich_.PerformLayout();
       mainFlowPanel_.ResumeLayout(false);
@@ -1347,10 +1396,10 @@ namespace TDTSandwich
       advanced_port_dropdown_.MouseWheel += _chill_MouseWheel;
       advanced_oversampling_dropdown_.MouseWheel += _chill_MouseWheel;
       advanced_ID_upDown_.MouseWheel += _chill_MouseWheel;
-      advanced_TStepDuration_upDown_.MouseWheel += _chill_MouseWheel;
+      //advanced_TStepDuration_upDown_.MouseWheel += _chill_MouseWheel;
       advanced_PID_proportional_upDown_.MouseWheel += _chill_MouseWheel;
       advanced_PID_integral_upDown_.MouseWheel += _chill_MouseWheel;
-      advanced_sampleOffset_upDown_.MouseWheel += _chill_MouseWheel;
+      //advanced_sampleOffset_upDown_.MouseWheel += _chill_MouseWheel;
 
 
       //
@@ -1366,6 +1415,8 @@ namespace TDTSandwich
       // Communications manager
       communications_ = new Communication(this, errorLogger_,
                                           HandleNewReadings,
+                                          HandleStartDAQ_checkSandwichID,
+                                          HandleStartDAQ_wrongDevice,
                                           HandleStartDAQSuccess,
                                           HandleStartDAQFail,
                                           HandleStopDAQSuccess,
@@ -1444,14 +1495,14 @@ namespace TDTSandwich
       configuration += Convert.ToString(advanced_thermocouple_dropdown_.SelectedItem);
       configuration += ",";
       configuration += Convert.ToString(advanced_oversampling_dropdown_.SelectedItem);
-      configuration += ",";
-      configuration += Convert.ToString(advanced_TStepDuration_upDown_.Value);
+      //configuration += ",";
+      //configuration += Convert.ToString(advanced_TStepDuration_upDown_.Value);
       configuration += ",";
       configuration += Convert.ToString(advanced_PID_proportional_upDown_.Value);
       configuration += ",";
       configuration += Convert.ToString(advanced_PID_integral_upDown_.Value);
-      configuration += ",";
-      configuration += Convert.ToString(advanced_sampleOffset_upDown_.Value);
+      //configuration += ",";
+      //configuration += Convert.ToString(advanced_sampleOffset_upDown_.Value);
       return configuration;
     }
 
@@ -1473,10 +1524,10 @@ namespace TDTSandwich
       advanced_thermocouple_dropdown_.SelectedValue = configurationParts[8];
       advanced_oversampling_dropdown_.SelectedItem = Convert.ToInt32(configurationParts[9]);
       advanced_oversampling_dropdown_.SelectedValue = Convert.ToInt32(configurationParts[9]);
-      advanced_TStepDuration_upDown_.Value = Convert.ToDecimal(configurationParts[10]);
+      //advanced_TStepDuration_upDown_.Value = Convert.ToDecimal(configurationParts[10]);
       advanced_PID_proportional_upDown_.Value = Convert.ToDecimal(configurationParts[11]);
       advanced_PID_integral_upDown_.Value = Convert.ToDecimal(configurationParts[12]);
-      advanced_sampleOffset_upDown_.Value = Convert.ToDecimal(configurationParts[13]);
+      //advanced_sampleOffset_upDown_.Value = Convert.ToDecimal(configurationParts[13]);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1499,7 +1550,7 @@ namespace TDTSandwich
       DAQActive_ = false;
 
       if (communications_.OpenPortConnection(GetComboSelectedItem(advanced_port_dropdown_)))
-      {// Port was successfully opened; begin sending command to start DAQ
+      {// Port was successfully opened; check if this is the correct device.
         // Start the sending and reading message threads
         commandInWorker_ = new Thread(communications_.handleCommandStatuses);
         commandInWorker_.IsBackground = true;
@@ -1508,6 +1559,25 @@ namespace TDTSandwich
         commandInWorker_.Start();
         commandOutWorker_.Start();
 
+        // Send command to check if this is the correct device.
+        communications_.QueueCommandConnection();
+      }
+      else
+      {// Failed to open port; revert changes to controls
+        ChangeControlEnable(DAQ_startDAQ_, true);
+        ChangeControlEnable(advanced_removeSandwich_, true);
+        ChangeControlEnable(DAQ_readSample_, true);
+        ChangeControlEnable(advanced_port_dropdown_, true);
+        DAQActive_ = false;
+        MessageBox.Show("There was a problem communicating with the sandwich. Verify that the sandwich with the correct ID is connected. After that, click \"Ports\" on the top menu and click \"Refresh Port List,\" followed by \"Auto-fill ports based on sandwich ID.\"", "Wrong device");
+      }
+    }
+
+    // When starting DAQ, it was verified that the chosen COM port contains a sandwich, but now need to verify its ID.
+    private void HandleStartDAQ_checkSandwichID(int receivedID)
+    {
+      if (receivedID == sandwichID_)
+      {// This is the correct sandwich.
         // Collect parameters for the DAQ
         string thermocoupleType;
         int samplesAverageCount;
@@ -1565,11 +1635,46 @@ namespace TDTSandwich
         communications_.QueueCommandStartDAQ(DAQSample_, thermocoupleType, samplesAverageCount);
       }
       else
-      {// Failed to open port; revert changes to controls
+      { // Wrong sandwich.
+        // Close the open connection.
+        try
+        {
+          Shutdown(false);
+        }
+        catch (Exception err)
+        {
+          errorLogger_.logUnknownError(err);
+        }
+
+        // Revert changes to controls.
         ChangeControlEnable(DAQ_startDAQ_, true);
         ChangeControlEnable(advanced_removeSandwich_, true);
         ChangeControlEnable(DAQ_readSample_, true);
+        ChangeControlEnable(advanced_port_dropdown_, true);
+        DAQActive_ = false;
+        MessageBox.Show("The port selected for this sandwich is incorrect. Verify that the sandwich with the correct ID is connected. After that, click \"Ports\" on the top menu and click \"Refresh Port List,\" followed by \"Auto-fill ports based on sandwich ID.\"", "Wrong device");
       }
+    }
+
+    // When starting DAQ, it was determined that the chosen COM port does not contain a sandwich.
+    private void HandleStartDAQ_wrongDevice()
+    {//revert changes to controls
+     // Close the open connection.
+      try
+      {
+        Shutdown(false);
+      }
+      catch (Exception err)
+      {
+        errorLogger_.logUnknownError(err);
+      }
+      
+      ChangeControlEnable(DAQ_startDAQ_, true);
+      ChangeControlEnable(advanced_removeSandwich_, true);
+      ChangeControlEnable(DAQ_readSample_, true);
+      ChangeControlEnable(advanced_port_dropdown_, true);
+      DAQActive_ = false;
+      MessageBox.Show("The port selected for this sandwich is incorrect. Verify that the sandwich with the correct ID is connected. After that, click \"Ports\" on the top menu and click \"Refresh Port List,\" followed by \"Auto-fill ports based on sandwich ID.\"", "Wrong device");
     }
 
     private void _stopDAQ_click(object sender, EventArgs e)
@@ -1809,18 +1914,22 @@ namespace TDTSandwich
 
     private void _showAdvancedHiddenPanel_click(object sender, EventArgs e)
     {
-      SuspendLayoutControl(advanced_flow_);
-      HideControl(advanced_show_, advanced_flow_);
+      SuspendLayoutControl(advanced_table_);
+      ChangeButtonVisibility(advanced_show_, false);
+      ChangeButtonVisibility(advanced_hide_, true);
       ChangeFlowVisibility(advanced_hiddenFlow_, true);
-      ResumeLayoutControl(advanced_flow_);
+      advanced_table_.ResumeLayout(false);
+      advanced_table_.PerformLayout();
     }
 
     private void _hideAdvancedHiddenPanel_click(object sender, EventArgs e)
     {
-      SuspendLayoutControl(advanced_flow_);
-      ShowControl(advanced_show_, advanced_flow_);
+      SuspendLayoutControl(advanced_table_);
+      ChangeButtonVisibility(advanced_hide_, false);
+      ChangeButtonVisibility(advanced_show_, true);
       ChangeFlowVisibility(advanced_hiddenFlow_, false);
-      ResumeLayoutControl(advanced_flow_);
+      advanced_table_.ResumeLayout(false);
+      advanced_table_.PerformLayout();
     }
 
     private void _blinkLED_click(object sender, EventArgs e)
@@ -2031,7 +2140,7 @@ namespace TDTSandwich
       // Close the serial connection
       try
       {
-        Shutdown();
+        Shutdown(false);
       }
       catch (Exception err)
       {
@@ -2051,7 +2160,7 @@ namespace TDTSandwich
       // Close the serial connection
       try
       {
-        Shutdown();
+        Shutdown(false);
       }
       catch (Exception err)
       {
@@ -2077,9 +2186,7 @@ namespace TDTSandwich
       DAQActive_ = true;
       ChangeControlEnable(DAQ_stopDAQ_, true);
       ChangeControlEnable(record_startRecord_, true);
-      ChangeControlEnable(record_stopRecord_, true);
       ChangeControlEnable(heat_startHeat_, true);
-      ChangeControlEnable(heat_stopHeat_, true);
     }
 
     // Handle the situation when heating was successfully started
@@ -2171,15 +2278,40 @@ namespace TDTSandwich
     }
 
     // Stop operation of the sandwich
-    public void Shutdown()
+    public void Shutdown(bool stopSandwichOperations)
     {
       // Stop all sandwich activity, if any
-      communications_.SendCommandShutdown();
+      if (stopSandwichOperations)
+      {
+        communications_.SendCommandShutdown();
+      }
 
       // Close the port
       if (!communications_.ClosePortConnection())
       {
         errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_PORT_CANTCLOSE, "CloseConnection");
+      }
+
+      // Stop recording, if it is in progress.
+      if (recordActive_)
+      {
+        try
+        {
+          CSVWriter_.Flush();
+          CSVWriter_.Close();
+        }
+        catch (ObjectDisposedException err)
+        {
+          errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_WRITER_CLOSED, err, err.Message);
+        }
+        catch (IOException err)
+        {
+          errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_WRITER_IO, err, err.Message);
+        }
+        catch (EncoderFallbackException err)
+        {
+          errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_WRITER_ENCODING, err, err.Message);
+        }
       }
     }
 
@@ -2228,6 +2360,19 @@ namespace TDTSandwich
       else
       {
         refControl.PerformLayout();
+      }
+    }
+
+    private void ChangeButtonVisibility(Button button, bool visibility)
+    {
+      if (button.InvokeRequired)
+      {
+        _changeButtonVisibilityCallback d = new _changeButtonVisibilityCallback(ChangeButtonVisibility);
+        owningForm_.Invoke(d, new object[] { button, visibility });
+      }
+      else
+      {
+        button.Visible = visibility;
       }
     }
 

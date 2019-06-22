@@ -44,7 +44,10 @@ namespace TDTSandwich
       COMPortAssignment = new List<COMPort>();
       unoccupiedCOMPorts = new List<string>(SerialPort.GetPortNames());
       sandwiches = new List<Sandwich>();
-      
+
+      // Clear the dummy sandwich used for testing out control arrangement.
+      mainFlow.Controls.Clear();
+
       // Try to find the default config file in current directory. If it doesn't exist, create one blank sandwich.
       bool defaultConfigExists = false;
 
@@ -157,7 +160,7 @@ namespace TDTSandwich
         // Out of all the identified legit ports, identify the ones that are already assigned to any sandwiches
         for (int i = 0; i < sandwiches.Count; i++)
         {
-          // Identify which sandwiches are already running (so they have a working port) and exclude them from the search
+          // Identify which sandwiches are already running (implying that they have a working port) and exclude them from the search
           if (sandwiches[i].getDAQStatus())
           {
             legitPorts.RemoveAll(x => x.portName == sandwiches[i].getCOMPort());
@@ -190,7 +193,7 @@ namespace TDTSandwich
                                     Communication.SERIAL_CMD_EOL));
 
           // Give time for Arduino to respond
-          System.Threading.Thread.Sleep(100);
+          System.Threading.Thread.Sleep(20);
 
           // Sometimes, the first command may not receive a response. So we send a second time
           // Clear all serial port buffers (to prepare for the second try)
@@ -203,7 +206,7 @@ namespace TDTSandwich
                                     Communication.SERIAL_CMD_EOL));
 
           // Give time for Arduino to respond
-          System.Threading.Thread.Sleep(100);
+          System.Threading.Thread.Sleep(50);
 
           commandSent = true;
         }
@@ -396,11 +399,8 @@ namespace TDTSandwich
         // Stop operation of all sandwiches and disconnect the ports
         foreach (Sandwich sandwich in sandwiches)
         {
-          sandwich.Shutdown();
+          sandwich.Shutdown(true);
         }
-
-        // Give ample time for all commands to be sent out
-        System.Threading.Thread.Sleep(1000);
 
         // Stop error logging
         errorLogger_.stopLoggingErrors();

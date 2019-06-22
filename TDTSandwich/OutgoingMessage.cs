@@ -16,9 +16,10 @@ namespace TDTSandwich
     public readonly int timeout;            // Max amount of time (ms) to wait before considering this command as timed out
     public readonly int maxAttempts;        // Max number of times to retry this command if it times out
     public int attempts;                    // Tracks the number of attempts to send this command
+    public readonly bool addCommandID;      // Determines if the outgoing command should have the command ID added to it.
     public string fullCommand;              // The full command string
     
-    public OutgoingMessage(string givenCommandType, string[] givenParamList, bool givenAwaitResponse, int givenTimeout, int givenMaxAttempts)
+    public OutgoingMessage(string givenCommandType, string[] givenParamList, bool givenAwaitResponse, int givenTimeout, int givenMaxAttempts, bool givenAddCommandID = true)
     {
       commandType     = givenCommandType;
       paramList       = givenParamList;
@@ -26,6 +27,7 @@ namespace TDTSandwich
       timeout         = givenTimeout;
       maxAttempts     = givenMaxAttempts;
       attempts        = 0;
+      addCommandID    = givenAddCommandID;
     }
   }
 }
