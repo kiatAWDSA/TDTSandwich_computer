@@ -985,6 +985,11 @@ namespace TDTSandwich
     {
       try
       {
+        // Re-initialize the queues and lists. This clears up the queues and lists from remnants of previous communications.
+        commandsWaiting_ = new List<OutgoingMessage>();
+        commandsOut_ = new ConcurrentQueue<OutgoingMessage>();
+        commandsIn_ = new ConcurrentQueue<IncomingMessage>();
+
         port_ = new SerialPort(portName, serialBaudRate, serialParity, serialDataBits, serialStopBits);
         port_.Handshake = serialHandshake;
         port_.Encoding = serialEncoding;
@@ -1029,7 +1034,7 @@ namespace TDTSandwich
     }
 
     // Close connection to the port
-    public bool ClosePortConnection()
+    public bool ClosePortConnection(bool closePort)
     {
       try
       {
@@ -1041,10 +1046,14 @@ namespace TDTSandwich
         stopCommandOut();
         stopCommandIn();
 
-        // Close the port
-        port_.Close();
-
+        // Close the connection
+        if (closePort)
+        {
+          port_.Close();
+        }
         connected_ = false;
+
+        // Note: the queues for commands in and out will be automatically cleared upon starting DAQ due to reinitialization of them.
         return true;
       }
       catch (Exception err)

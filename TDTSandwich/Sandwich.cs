@@ -1495,8 +1495,6 @@ namespace TDTSandwich
       configuration += Convert.ToString(advanced_thermocouple_dropdown_.SelectedItem);
       configuration += ",";
       configuration += Convert.ToString(advanced_oversampling_dropdown_.SelectedItem);
-      //configuration += ",";
-      //configuration += Convert.ToString(advanced_TStepDuration_upDown_.Value);
       configuration += ",";
       configuration += Convert.ToString(advanced_PID_proportional_upDown_.Value);
       configuration += ",";
@@ -1521,13 +1519,10 @@ namespace TDTSandwich
       record_filepath_textbox_.Text = configurationParts[7];
       savePathway_ = record_filepath_textbox_.Text;   // Just following the event that is triggered when the record file path is changed
       advanced_thermocouple_dropdown_.SelectedItem = configurationParts[8];
-      advanced_thermocouple_dropdown_.SelectedValue = configurationParts[8];
       advanced_oversampling_dropdown_.SelectedItem = Convert.ToInt32(configurationParts[9]);
-      advanced_oversampling_dropdown_.SelectedValue = Convert.ToInt32(configurationParts[9]);
-      //advanced_TStepDuration_upDown_.Value = Convert.ToDecimal(configurationParts[10]);
-      advanced_PID_proportional_upDown_.Value = Convert.ToDecimal(configurationParts[11]);
-      advanced_PID_integral_upDown_.Value = Convert.ToDecimal(configurationParts[12]);
-      //advanced_sampleOffset_upDown_.Value = Convert.ToDecimal(configurationParts[13]);
+      advanced_PID_proportional_upDown_.Value = Convert.ToDecimal(configurationParts[10]);
+      advanced_PID_integral_upDown_.Value = Convert.ToDecimal(configurationParts[11]);
+      //advanced_sampleOffset_upDown_.Value = Convert.ToDecimal(configurationParts[12]);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1639,7 +1634,7 @@ namespace TDTSandwich
         // Close the open connection.
         try
         {
-          Shutdown(false);
+          Shutdown(true);
         }
         catch (Exception err)
         {
@@ -1662,7 +1657,7 @@ namespace TDTSandwich
      // Close the open connection.
       try
       {
-        Shutdown(false);
+        Shutdown(true);
       }
       catch (Exception err)
       {
@@ -1803,7 +1798,8 @@ namespace TDTSandwich
       {
         errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_PATH, err, err.Message);
         ChangeControlEnable(record_startRecord_, true);
-        UpdateTextBox(record_filepath_textbox_, "INVALID FILE PATH");
+        MessageBox.Show("The program encountered an error when attempting to record data. Please check that the path exists or change the name of the file.", "Error recording data");
+        MessageBox.Show(err.Message, "Error recording data");
       }
 
       if (legitFilePath_)
@@ -2140,7 +2136,7 @@ namespace TDTSandwich
       // Close the serial connection
       try
       {
-        Shutdown(false);
+        Shutdown(true);
       }
       catch (Exception err)
       {
@@ -2160,7 +2156,7 @@ namespace TDTSandwich
       // Close the serial connection
       try
       {
-        Shutdown(false);
+        Shutdown(true);
       }
       catch (Exception err)
       {
@@ -2277,19 +2273,37 @@ namespace TDTSandwich
       UpdateTextBox(TBoxList[TCAmplifierIndex], "Error");
     }
 
-    // Stop operation of the sandwich
-    public void Shutdown(bool stopSandwichOperations)
+    // Send command to the sandwich to stop all operations.
+    public void SendCommandShutdown()
     {
-      // Stop all sandwich activity, if any
-      if (stopSandwichOperations)
+      // Halt all multi-thread communication with sandwich.
+      communications_.stopCommandIn();
+      if (commandInWorker_ != null)
       {
-        communications_.SendCommandShutdown();
+        commandInWorker_.Join();
       }
+      communications_.stopCommandOut();
+      if (commandOutWorker_ != null)
+      {
+        commandOutWorker_.Join();
+      }
+      // Halt all sandwich operations.
+      communications_.SendCommandShutdown();
+    }
 
+    // Close connection to the sandwich and end all ongoing operations for it on the computer-side
+    public void Shutdown(bool closePort)
+    {
       // Close the port
-      if (!communications_.ClosePortConnection())
+      if (!communications_.ClosePortConnection(closePort))
       {
         errorLogger_.logCProgError(ErrorLogger.ERR_PROG_GENERAL_PORT_CANTCLOSE, "CloseConnection");
+      }
+      else
+      {
+        // The port was never open or failed to close port; Ignore any messages received from sandwich
+        communications_.stopCommandOut();
+        communications_.stopCommandIn();
       }
 
       // Stop recording, if it is in progress.

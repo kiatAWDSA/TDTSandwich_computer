@@ -77,14 +77,14 @@
       this.sandwich_0_advanced = new System.Windows.Forms.GroupBox();
       this.sandwich_0_advanced_table = new System.Windows.Forms.TableLayoutPanel();
       this.sandwich_0_advanced_hiddenFlow = new System.Windows.Forms.FlowLayoutPanel();
-      this.sandwich_0_advanced_thermocouple = new System.Windows.Forms.FlowLayoutPanel();
-      this.sandwich_0_advanced_thermocouple_label = new System.Windows.Forms.Label();
-      this.sandwich_0_advanced_port = new System.Windows.Forms.FlowLayoutPanel();
-      this.sandwich_0_advanced_port_label = new System.Windows.Forms.Label();
-      this.sandwich_0_advanced_port_dropdown = new System.Windows.Forms.ComboBox();
       this.sandwich_0_advanced_ID = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_advanced_ID_label = new System.Windows.Forms.Label();
       this.sandwich_0_advanced_ID_upDown = new System.Windows.Forms.NumericUpDown();
+      this.sandwich_0_advanced_port = new System.Windows.Forms.FlowLayoutPanel();
+      this.sandwich_0_advanced_port_label = new System.Windows.Forms.Label();
+      this.sandwich_0_advanced_port_dropdown = new System.Windows.Forms.ComboBox();
+      this.sandwich_0_advanced_thermocouple = new System.Windows.Forms.FlowLayoutPanel();
+      this.sandwich_0_advanced_thermocouple_label = new System.Windows.Forms.Label();
       this.sandwich_0_advanced_removeSandwich = new System.Windows.Forms.Button();
       this.sandwich_0_advanced_oversampling = new System.Windows.Forms.FlowLayoutPanel();
       this.label3 = new System.Windows.Forms.Label();
@@ -135,10 +135,10 @@
       this.sandwich_0_advanced.SuspendLayout();
       this.sandwich_0_advanced_table.SuspendLayout();
       this.sandwich_0_advanced_hiddenFlow.SuspendLayout();
-      this.sandwich_0_advanced_thermocouple.SuspendLayout();
-      this.sandwich_0_advanced_port.SuspendLayout();
       this.sandwich_0_advanced_ID.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).BeginInit();
+      this.sandwich_0_advanced_port.SuspendLayout();
+      this.sandwich_0_advanced_thermocouple.SuspendLayout();
       this.sandwich_0_advanced_oversampling.SuspendLayout();
       this.sandwich_0_advanced_PID_proportional.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -730,27 +730,39 @@
       this.sandwich_0_advanced_hiddenFlow.Size = new System.Drawing.Size(528, 49);
       this.sandwich_0_advanced_hiddenFlow.TabIndex = 24;
       // 
-      // sandwich_0_advanced_thermocouple
+      // sandwich_0_advanced_ID
       // 
-      this.sandwich_0_advanced_thermocouple.Controls.Add(this.sandwich_0_advanced_thermocouple_label);
-      this.sandwich_0_advanced_thermocouple.Controls.Add(this.sandwich_0_advanced_thermocouple_dropdown);
-      this.sandwich_0_advanced_thermocouple.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.sandwich_0_advanced_thermocouple.Location = new System.Drawing.Point(155, 0);
-      this.sandwich_0_advanced_thermocouple.Margin = new System.Windows.Forms.Padding(0);
-      this.sandwich_0_advanced_thermocouple.Name = "sandwich_0_advanced_thermocouple";
-      this.sandwich_0_advanced_thermocouple.Size = new System.Drawing.Size(84, 49);
-      this.sandwich_0_advanced_thermocouple.TabIndex = 23;
-      this.sandwich_0_advanced_thermocouple.Visible = false;
+      this.sandwich_0_advanced_ID.Controls.Add(this.sandwich_0_advanced_ID_label);
+      this.sandwich_0_advanced_ID.Controls.Add(this.sandwich_0_advanced_ID_upDown);
+      this.sandwich_0_advanced_ID.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.sandwich_0_advanced_ID.Location = new System.Drawing.Point(51, 0);
+      this.sandwich_0_advanced_ID.Margin = new System.Windows.Forms.Padding(0);
+      this.sandwich_0_advanced_ID.Name = "sandwich_0_advanced_ID";
+      this.sandwich_0_advanced_ID.Size = new System.Drawing.Size(40, 49);
+      this.sandwich_0_advanced_ID.TabIndex = 25;
+      this.sandwich_0_advanced_ID.Visible = false;
       // 
-      // sandwich_0_advanced_thermocouple_label
+      // sandwich_0_advanced_ID_label
       // 
-      this.sandwich_0_advanced_thermocouple_label.AutoSize = true;
-      this.sandwich_0_advanced_thermocouple_label.Location = new System.Drawing.Point(3, 3);
-      this.sandwich_0_advanced_thermocouple_label.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-      this.sandwich_0_advanced_thermocouple_label.Name = "sandwich_0_advanced_thermocouple_label";
-      this.sandwich_0_advanced_thermocouple_label.Size = new System.Drawing.Size(75, 13);
-      this.sandwich_0_advanced_thermocouple_label.TabIndex = 18;
-      this.sandwich_0_advanced_thermocouple_label.Text = "Thermocouple\r\n";
+      this.sandwich_0_advanced_ID_label.AutoSize = true;
+      this.sandwich_0_advanced_ID_label.Location = new System.Drawing.Point(3, 3);
+      this.sandwich_0_advanced_ID_label.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+      this.sandwich_0_advanced_ID_label.Name = "sandwich_0_advanced_ID_label";
+      this.sandwich_0_advanced_ID_label.Size = new System.Drawing.Size(18, 13);
+      this.sandwich_0_advanced_ID_label.TabIndex = 21;
+      this.sandwich_0_advanced_ID_label.Text = "ID";
+      // 
+      // sandwich_0_advanced_ID_upDown
+      // 
+      this.sandwich_0_advanced_ID_upDown.Location = new System.Drawing.Point(3, 19);
+      this.sandwich_0_advanced_ID_upDown.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+      this.sandwich_0_advanced_ID_upDown.Name = "sandwich_0_advanced_ID_upDown";
+      this.sandwich_0_advanced_ID_upDown.Size = new System.Drawing.Size(37, 20);
+      this.sandwich_0_advanced_ID_upDown.TabIndex = 6;
       // 
       // sandwich_0_advanced_port
       // 
@@ -792,39 +804,27 @@
       this.sandwich_0_advanced_port_dropdown.Size = new System.Drawing.Size(55, 21);
       this.sandwich_0_advanced_port_dropdown.TabIndex = 5;
       // 
-      // sandwich_0_advanced_ID
+      // sandwich_0_advanced_thermocouple
       // 
-      this.sandwich_0_advanced_ID.Controls.Add(this.sandwich_0_advanced_ID_label);
-      this.sandwich_0_advanced_ID.Controls.Add(this.sandwich_0_advanced_ID_upDown);
-      this.sandwich_0_advanced_ID.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-      this.sandwich_0_advanced_ID.Location = new System.Drawing.Point(51, 0);
-      this.sandwich_0_advanced_ID.Margin = new System.Windows.Forms.Padding(0);
-      this.sandwich_0_advanced_ID.Name = "sandwich_0_advanced_ID";
-      this.sandwich_0_advanced_ID.Size = new System.Drawing.Size(40, 49);
-      this.sandwich_0_advanced_ID.TabIndex = 25;
-      this.sandwich_0_advanced_ID.Visible = false;
+      this.sandwich_0_advanced_thermocouple.Controls.Add(this.sandwich_0_advanced_thermocouple_label);
+      this.sandwich_0_advanced_thermocouple.Controls.Add(this.sandwich_0_advanced_thermocouple_dropdown);
+      this.sandwich_0_advanced_thermocouple.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+      this.sandwich_0_advanced_thermocouple.Location = new System.Drawing.Point(155, 0);
+      this.sandwich_0_advanced_thermocouple.Margin = new System.Windows.Forms.Padding(0);
+      this.sandwich_0_advanced_thermocouple.Name = "sandwich_0_advanced_thermocouple";
+      this.sandwich_0_advanced_thermocouple.Size = new System.Drawing.Size(84, 49);
+      this.sandwich_0_advanced_thermocouple.TabIndex = 23;
+      this.sandwich_0_advanced_thermocouple.Visible = false;
       // 
-      // sandwich_0_advanced_ID_label
+      // sandwich_0_advanced_thermocouple_label
       // 
-      this.sandwich_0_advanced_ID_label.AutoSize = true;
-      this.sandwich_0_advanced_ID_label.Location = new System.Drawing.Point(3, 3);
-      this.sandwich_0_advanced_ID_label.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-      this.sandwich_0_advanced_ID_label.Name = "sandwich_0_advanced_ID_label";
-      this.sandwich_0_advanced_ID_label.Size = new System.Drawing.Size(18, 13);
-      this.sandwich_0_advanced_ID_label.TabIndex = 21;
-      this.sandwich_0_advanced_ID_label.Text = "ID";
-      // 
-      // sandwich_0_advanced_ID_upDown
-      // 
-      this.sandwich_0_advanced_ID_upDown.Location = new System.Drawing.Point(3, 19);
-      this.sandwich_0_advanced_ID_upDown.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-      this.sandwich_0_advanced_ID_upDown.Name = "sandwich_0_advanced_ID_upDown";
-      this.sandwich_0_advanced_ID_upDown.Size = new System.Drawing.Size(37, 20);
-      this.sandwich_0_advanced_ID_upDown.TabIndex = 6;
+      this.sandwich_0_advanced_thermocouple_label.AutoSize = true;
+      this.sandwich_0_advanced_thermocouple_label.Location = new System.Drawing.Point(3, 3);
+      this.sandwich_0_advanced_thermocouple_label.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+      this.sandwich_0_advanced_thermocouple_label.Name = "sandwich_0_advanced_thermocouple_label";
+      this.sandwich_0_advanced_thermocouple_label.Size = new System.Drawing.Size(75, 13);
+      this.sandwich_0_advanced_thermocouple_label.TabIndex = 18;
+      this.sandwich_0_advanced_thermocouple_label.Text = "Thermocouple\r\n";
       // 
       // sandwich_0_advanced_removeSandwich
       // 
@@ -1089,7 +1089,7 @@
       this.menu_copyright.Name = "menu_copyright";
       this.menu_copyright.ReadOnly = true;
       this.menu_copyright.Size = new System.Drawing.Size(150, 23);
-      this.menu_copyright.Text = "v 3.0 Soon Kiat Lau, 2019";
+      this.menu_copyright.Text = "v 3.2 Soon Kiat Lau, 2019";
       this.menu_copyright.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // openConfigFileDialog
@@ -1158,13 +1158,13 @@
       this.sandwich_0_advanced_table.ResumeLayout(false);
       this.sandwich_0_advanced_table.PerformLayout();
       this.sandwich_0_advanced_hiddenFlow.ResumeLayout(false);
-      this.sandwich_0_advanced_thermocouple.ResumeLayout(false);
-      this.sandwich_0_advanced_thermocouple.PerformLayout();
-      this.sandwich_0_advanced_port.ResumeLayout(false);
-      this.sandwich_0_advanced_port.PerformLayout();
       this.sandwich_0_advanced_ID.ResumeLayout(false);
       this.sandwich_0_advanced_ID.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).EndInit();
+      this.sandwich_0_advanced_port.ResumeLayout(false);
+      this.sandwich_0_advanced_port.PerformLayout();
+      this.sandwich_0_advanced_thermocouple.ResumeLayout(false);
+      this.sandwich_0_advanced_thermocouple.PerformLayout();
       this.sandwich_0_advanced_oversampling.ResumeLayout(false);
       this.sandwich_0_advanced_oversampling.PerformLayout();
       this.sandwich_0_advanced_PID_proportional.ResumeLayout(false);

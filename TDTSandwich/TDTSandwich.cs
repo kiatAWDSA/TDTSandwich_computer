@@ -374,8 +374,8 @@ namespace TDTSandwich
         }
         catch (Exception err)
         {
-          MessageBox.Show("Error saving configuration file. Please choose a different configuration file name or check if you appropriate privileges to save file to this location.", "Error");
-          MessageBox.Show(err.Message, "Exception message (contact Kiat about this)");
+          MessageBox.Show("The program encountered an error when attempting to save the configuration. Please choose a different name for the configuration or check if you appropriate/administrator privileges to save file to this location.", "Error saving configuration file");
+          MessageBox.Show(err.Message, "Error saving configuration file");
         }
       }
     }
@@ -399,7 +399,14 @@ namespace TDTSandwich
         // Stop operation of all sandwiches and disconnect the ports
         foreach (Sandwich sandwich in sandwiches)
         {
-          sandwich.Shutdown(true);
+          sandwich.SendCommandShutdown();
+        }
+        foreach (Sandwich sandwich in sandwiches)
+        {
+          // Don't close port because it will cause the thread to hang:
+          // https://stackoverflow.com/questions/8843301/c-sharp-winform-freezing-on-serialport-close
+          // Instead, let the closing routine handle it because it will be automatically closed upon program exit anyway.
+          sandwich.Shutdown(false);
         }
 
         // Stop error logging
