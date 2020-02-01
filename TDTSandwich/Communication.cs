@@ -1034,21 +1034,22 @@ namespace TDTSandwich
     }
 
     // Close connection to the port
-    public bool ClosePortConnection(bool closePort)
+    public bool ClosePortConnection(bool completelyClosePort)
     {
       try
       {
-        // Remove serial data event handler
-        port_.DataReceived -= serialDataReceivedHandler_;
-        serialDataReceivedHandler_ = null;
-
         // Stop all message handling; This would also lead to the threads eventually terminating by themselves
         stopCommandOut();
         stopCommandIn();
 
         // Close the connection
-        if (closePort)
+        if (completelyClosePort)
         {
+          // Remove serial data event handler
+          port_.DataReceived -= serialDataReceivedHandler_;
+          serialDataReceivedHandler_ = null;
+
+          // Close port
           port_.Close();
         }
         connected_ = false;
