@@ -619,7 +619,7 @@ namespace TDTSandwich
       heat_rate_upDown_.Location = new System.Drawing.Point(3, 19);
       heat_rate_upDown_.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
       heat_rate_upDown_.Minimum = 0;
-      heat_rate_upDown_.Maximum = 999;
+      heat_rate_upDown_.Maximum = 100;
       heat_rate_upDown_.Name = controlPrefix_ + "_heat_rate_upDown";
       heat_rate_upDown_.Size = new System.Drawing.Size(69, 26);
       heat_rate_upDown_.TabIndex = 1;
@@ -1377,14 +1377,14 @@ namespace TDTSandwich
       configuration = configuration.TrimEnd('\n');
       string[] configurationParts = configuration.Split(',');
 
-      ID_upDown_.Value = Convert.ToDecimal(configurationParts[0]);
+      ID_upDown_.Value = Convert.ToDecimal(configurationParts[0]) > ID_upDown_.Maximum ? ID_upDown_.Maximum : Convert.ToDecimal(configurationParts[0]);
       DAQ_readSample_.Checked = Convert.ToBoolean(configurationParts[1]);
-      heat_setpoint_upDown_.Value = Convert.ToDecimal(configurationParts[2]);
+      heat_setpoint_upDown_.Value = Convert.ToDecimal(configurationParts[2]) > heat_setpoint_upDown_.Maximum ? heat_setpoint_upDown_.Maximum : Convert.ToDecimal(configurationParts[2]);
       heat_maxRate_.Checked = Convert.ToBoolean(configurationParts[3]);
-      heat_rate_upDown_.Value = Convert.ToDecimal(configurationParts[4]);
-      heat_timer_h_upDown_.Value = Convert.ToDecimal(configurationParts[5]);
-      heat_timer_m_upDown_.Value = Convert.ToDecimal(configurationParts[6]);
-      heat_timer_s_upDown_.Value = Convert.ToDecimal(configurationParts[7]);
+      heat_rate_upDown_.Value = Convert.ToDecimal(configurationParts[4]) > heat_rate_upDown_.Maximum ? heat_rate_upDown_.Maximum : Convert.ToDecimal(configurationParts[4]);
+      heat_timer_h_upDown_.Value = Convert.ToDecimal(configurationParts[5]) > heat_timer_h_upDown_.Maximum ? heat_timer_h_upDown_.Maximum : Convert.ToDecimal(configurationParts[5]);
+      heat_timer_m_upDown_.Value = Convert.ToDecimal(configurationParts[6]) > heat_timer_m_upDown_.Maximum ? heat_timer_m_upDown_.Maximum : Convert.ToDecimal(configurationParts[6]);
+      heat_timer_s_upDown_.Value = Convert.ToDecimal(configurationParts[7]) > heat_timer_s_upDown_.Maximum ? heat_timer_s_upDown_.Maximum : Convert.ToDecimal(configurationParts[7]);
       record_filepath_textbox_.Text = configurationParts[8];
       savePathway_ = record_filepath_textbox_.Text;   // Just following the event that is triggered when the record file path is changed
       advanced_thermocouple_dropdown_.SelectedItem = configurationParts[9];

@@ -522,11 +522,6 @@
       this.numericUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.numericUpDown2.Location = new System.Drawing.Point(3, 19);
       this.numericUpDown2.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
-      this.numericUpDown2.Maximum = new decimal(new int[] {
-            999999,
-            0,
-            0,
-            131072});
       this.numericUpDown2.Name = "numericUpDown2";
       this.numericUpDown2.Size = new System.Drawing.Size(69, 26);
       this.numericUpDown2.TabIndex = 1;
