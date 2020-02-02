@@ -439,6 +439,7 @@ namespace TDTSandwich
       DAQ_readSample_.TabIndex = 2;
       DAQ_readSample_.Text = "Read\r\nsample";
       DAQ_readSample_.UseVisualStyleBackColor = true;
+      DAQ_readSample_.Checked = false;
       // 
       // DAQ_sample
       // 
@@ -453,6 +454,7 @@ namespace TDTSandwich
       DAQ_sample_.Name = controlPrefix_ + "_DAQ_sample";
       DAQ_sample_.Size = new System.Drawing.Size(68, 48);
       DAQ_sample_.TabIndex = 3;
+      DAQ_sample_.Visible = false;
       // 
       // DAQ_sample_label
       // 
@@ -1087,8 +1089,8 @@ namespace TDTSandwich
       advanced_oversampling_dropdown_.Location = new System.Drawing.Point(0, 0);
       advanced_oversampling_dropdown_.Name = controlPrefix_ + "_advanced_oversampling_dropdown";
       advanced_oversampling_dropdown_.Size = new System.Drawing.Size(55, 21);
-      advanced_oversampling_dropdown_.SelectedValue = 2; // This sets the default value of the thermocouple type drop down list to T...
-      advanced_oversampling_dropdown_.SelectedItem = 2; // ...and this makes it display the value of T
+      advanced_oversampling_dropdown_.SelectedValue = 8; // This sets the default value of the sampling drop down list to 8...
+      advanced_oversampling_dropdown_.SelectedItem = 8; // ...and this makes it display the value of 8
       advanced_oversampling_dropdown_.TabIndex = 1;
       advanced_oversampling_dropdown_.Tag = "";
       // 
@@ -1128,6 +1130,7 @@ namespace TDTSandwich
       advanced_PID_proportional_upDown_.Size = new System.Drawing.Size(77, 26);
       advanced_PID_proportional_upDown_.TabIndex = 1;
       advanced_PID_proportional_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      advanced_PID_proportional_upDown_.Value = 25;
       // 
       // advanced_PID_integral
       // 
@@ -1165,6 +1168,7 @@ namespace TDTSandwich
       advanced_PID_integral_upDown_.Size = new System.Drawing.Size(77, 26);
       advanced_PID_integral_upDown_.TabIndex = 1;
       advanced_PID_integral_upDown_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      advanced_PID_integral_upDown_.Value = 1.7M;
 
 
       // 
