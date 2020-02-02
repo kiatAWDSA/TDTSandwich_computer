@@ -41,21 +41,23 @@
       this.sandwich_0_advanced_blinkLED = new System.Windows.Forms.Button();
       this.sandwich_0_ID = new System.Windows.Forms.GroupBox();
       this.sandwich_0_ID_flow = new System.Windows.Forms.FlowLayoutPanel();
+      this.sandwich_0_advanced_ID_upDown = new System.Windows.Forms.NumericUpDown();
       this.sandwich_0_DAQ = new System.Windows.Forms.GroupBox();
       this.sandwich_0_DAQ_flow = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_DAQ_heater = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_DAQ_heater2 = new System.Windows.Forms.FlowLayoutPanel();
       this.label1 = new System.Windows.Forms.Label();
       this.sandwich_0_DAQ_heater2_textbox = new System.Windows.Forms.TextBox();
+      this.sandwich_0_DAQ_readSample = new System.Windows.Forms.CheckBox();
       this.sandwich_0_DAQ_sample = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_DAQ_sample_label = new System.Windows.Forms.Label();
       this.sandwich_0_DAQ_sample_textbox = new System.Windows.Forms.TextBox();
-      this.sandwich_0_DAQ_readSample = new System.Windows.Forms.CheckBox();
       this.sandwich_0_heat = new System.Windows.Forms.GroupBox();
       this.sandwich_0_heat_flow = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_heat_setpoint = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_heat_setpoint_label = new System.Windows.Forms.Label();
       this.sandwich_0_heat_setpoint_upDown = new System.Windows.Forms.NumericUpDown();
+      this.sandwich_0_heat_maxRate = new System.Windows.Forms.CheckBox();
       this.sandwich_0_heat_rate = new System.Windows.Forms.FlowLayoutPanel();
       this.label2 = new System.Windows.Forms.Label();
       this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
@@ -76,13 +78,12 @@
       this.sandwich_0_advanced = new System.Windows.Forms.GroupBox();
       this.sandwich_0_advanced_table = new System.Windows.Forms.TableLayoutPanel();
       this.sandwich_0_advanced_hiddenFlow = new System.Windows.Forms.FlowLayoutPanel();
-      this.sandwich_0_advanced_ID_upDown = new System.Windows.Forms.NumericUpDown();
+      this.sandwich_0_advanced_removeSandwich = new System.Windows.Forms.Button();
       this.sandwich_0_advanced_port = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_advanced_port_label = new System.Windows.Forms.Label();
       this.sandwich_0_advanced_port_dropdown = new System.Windows.Forms.ComboBox();
       this.sandwich_0_advanced_thermocouple = new System.Windows.Forms.FlowLayoutPanel();
       this.sandwich_0_advanced_thermocouple_label = new System.Windows.Forms.Label();
-      this.sandwich_0_advanced_removeSandwich = new System.Windows.Forms.Button();
       this.sandwich_0_advanced_oversampling = new System.Windows.Forms.FlowLayoutPanel();
       this.label3 = new System.Windows.Forms.Label();
       this.sandwich_0_advanced_oversampling_dropdown = new System.Windows.Forms.ComboBox();
@@ -108,9 +109,9 @@
       this.openConfigFileDialog = new System.Windows.Forms.OpenFileDialog();
       this.saveConfigFileDialog = new System.Windows.Forms.SaveFileDialog();
       this.recordFileDialog = new System.Windows.Forms.SaveFileDialog();
-      this.sandwich_0_heat_maxRate = new System.Windows.Forms.CheckBox();
       this.sandwich_0_ID.SuspendLayout();
       this.sandwich_0_ID_flow.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).BeginInit();
       this.sandwich_0_DAQ.SuspendLayout();
       this.sandwich_0_DAQ_flow.SuspendLayout();
       this.sandwich_0_DAQ_heater.SuspendLayout();
@@ -133,7 +134,6 @@
       this.sandwich_0_advanced.SuspendLayout();
       this.sandwich_0_advanced_table.SuspendLayout();
       this.sandwich_0_advanced_hiddenFlow.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).BeginInit();
       this.sandwich_0_advanced_port.SuspendLayout();
       this.sandwich_0_advanced_thermocouple.SuspendLayout();
       this.sandwich_0_advanced_oversampling.SuspendLayout();
@@ -275,7 +275,7 @@
       this.sandwich_0_ID.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
       this.sandwich_0_ID.Name = "sandwich_0_ID";
       this.sandwich_0_ID.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.sandwich_0_ID.Size = new System.Drawing.Size(57, 64);
+      this.sandwich_0_ID.Size = new System.Drawing.Size(57, 62);
       this.sandwich_0_ID.TabIndex = 0;
       this.sandwich_0_ID.TabStop = false;
       this.sandwich_0_ID.Text = "ID";
@@ -289,8 +289,28 @@
       this.sandwich_0_ID_flow.Location = new System.Drawing.Point(3, 13);
       this.sandwich_0_ID_flow.Margin = new System.Windows.Forms.Padding(0);
       this.sandwich_0_ID_flow.Name = "sandwich_0_ID_flow";
-      this.sandwich_0_ID_flow.Size = new System.Drawing.Size(51, 51);
+      this.sandwich_0_ID_flow.Size = new System.Drawing.Size(51, 49);
       this.sandwich_0_ID_flow.TabIndex = 0;
+      // 
+      // sandwich_0_advanced_ID_upDown
+      // 
+      this.sandwich_0_advanced_ID_upDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.sandwich_0_advanced_ID_upDown.Location = new System.Drawing.Point(3, 13);
+      this.sandwich_0_advanced_ID_upDown.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
+      this.sandwich_0_advanced_ID_upDown.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+      this.sandwich_0_advanced_ID_upDown.Name = "sandwich_0_advanced_ID_upDown";
+      this.sandwich_0_advanced_ID_upDown.Size = new System.Drawing.Size(45, 29);
+      this.sandwich_0_advanced_ID_upDown.TabIndex = 0;
+      this.sandwich_0_advanced_ID_upDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.sandwich_0_advanced_ID_upDown.Value = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
       // 
       // sandwich_0_DAQ
       // 
@@ -302,7 +322,7 @@
       this.sandwich_0_DAQ.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
       this.sandwich_0_DAQ.Name = "sandwich_0_DAQ";
       this.sandwich_0_DAQ.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.sandwich_0_DAQ.Size = new System.Drawing.Size(386, 64);
+      this.sandwich_0_DAQ.Size = new System.Drawing.Size(386, 62);
       this.sandwich_0_DAQ.TabIndex = 1;
       this.sandwich_0_DAQ.TabStop = false;
       this.sandwich_0_DAQ.Text = "DAQ";
@@ -321,7 +341,7 @@
       this.sandwich_0_DAQ_flow.Location = new System.Drawing.Point(3, 13);
       this.sandwich_0_DAQ_flow.Margin = new System.Windows.Forms.Padding(0);
       this.sandwich_0_DAQ_flow.Name = "sandwich_0_DAQ_flow";
-      this.sandwich_0_DAQ_flow.Size = new System.Drawing.Size(380, 51);
+      this.sandwich_0_DAQ_flow.Size = new System.Drawing.Size(380, 49);
       this.sandwich_0_DAQ_flow.TabIndex = 0;
       // 
       // sandwich_0_DAQ_heater
@@ -373,6 +393,17 @@
       this.sandwich_0_DAQ_heater2_textbox.TabIndex = 1;
       this.sandwich_0_DAQ_heater2_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
+      // sandwich_0_DAQ_readSample
+      // 
+      this.sandwich_0_DAQ_readSample.AutoSize = true;
+      this.sandwich_0_DAQ_readSample.Location = new System.Drawing.Point(151, 12);
+      this.sandwich_0_DAQ_readSample.Margin = new System.Windows.Forms.Padding(3, 12, 0, 0);
+      this.sandwich_0_DAQ_readSample.Name = "sandwich_0_DAQ_readSample";
+      this.sandwich_0_DAQ_readSample.Size = new System.Drawing.Size(59, 30);
+      this.sandwich_0_DAQ_readSample.TabIndex = 2;
+      this.sandwich_0_DAQ_readSample.Text = "Read\r\nsample";
+      this.sandwich_0_DAQ_readSample.UseVisualStyleBackColor = true;
+      // 
       // sandwich_0_DAQ_sample
       // 
       this.sandwich_0_DAQ_sample.AutoSize = true;
@@ -409,17 +440,6 @@
       this.sandwich_0_DAQ_sample_textbox.TabIndex = 1;
       this.sandwich_0_DAQ_sample_textbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
-      // sandwich_0_DAQ_readSample
-      // 
-      this.sandwich_0_DAQ_readSample.AutoSize = true;
-      this.sandwich_0_DAQ_readSample.Location = new System.Drawing.Point(151, 12);
-      this.sandwich_0_DAQ_readSample.Margin = new System.Windows.Forms.Padding(3, 12, 0, 0);
-      this.sandwich_0_DAQ_readSample.Name = "sandwich_0_DAQ_readSample";
-      this.sandwich_0_DAQ_readSample.Size = new System.Drawing.Size(59, 30);
-      this.sandwich_0_DAQ_readSample.TabIndex = 2;
-      this.sandwich_0_DAQ_readSample.Text = "Read\r\nsample";
-      this.sandwich_0_DAQ_readSample.UseVisualStyleBackColor = true;
-      // 
       // sandwich_0_heat
       // 
       this.sandwich_0_heat.AutoSize = true;
@@ -430,7 +450,7 @@
       this.sandwich_0_heat.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
       this.sandwich_0_heat.Name = "sandwich_0_heat";
       this.sandwich_0_heat.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.sandwich_0_heat.Size = new System.Drawing.Size(532, 64);
+      this.sandwich_0_heat.Size = new System.Drawing.Size(532, 62);
       this.sandwich_0_heat.TabIndex = 2;
       this.sandwich_0_heat.TabStop = false;
       this.sandwich_0_heat.Text = "Heat";
@@ -449,7 +469,7 @@
       this.sandwich_0_heat_flow.Location = new System.Drawing.Point(3, 13);
       this.sandwich_0_heat_flow.Margin = new System.Windows.Forms.Padding(0);
       this.sandwich_0_heat_flow.Name = "sandwich_0_heat_flow";
-      this.sandwich_0_heat_flow.Size = new System.Drawing.Size(526, 51);
+      this.sandwich_0_heat_flow.Size = new System.Drawing.Size(526, 49);
       this.sandwich_0_heat_flow.TabIndex = 0;
       // 
       // sandwich_0_heat_setpoint
@@ -491,6 +511,17 @@
       this.sandwich_0_heat_setpoint_upDown.Size = new System.Drawing.Size(60, 26);
       this.sandwich_0_heat_setpoint_upDown.TabIndex = 1;
       this.sandwich_0_heat_setpoint_upDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      // 
+      // sandwich_0_heat_maxRate
+      // 
+      this.sandwich_0_heat_maxRate.AutoSize = true;
+      this.sandwich_0_heat_maxRate.Location = new System.Drawing.Point(75, 3);
+      this.sandwich_0_heat_maxRate.Margin = new System.Windows.Forms.Padding(3, 3, 0, 0);
+      this.sandwich_0_heat_maxRate.Name = "sandwich_0_heat_maxRate";
+      this.sandwich_0_heat_maxRate.Size = new System.Drawing.Size(61, 43);
+      this.sandwich_0_heat_maxRate.TabIndex = 1;
+      this.sandwich_0_heat_maxRate.Text = "Max\r\nheating\r\nrate";
+      this.sandwich_0_heat_maxRate.UseVisualStyleBackColor = true;
       // 
       // sandwich_0_heat_rate
       // 
@@ -647,7 +678,7 @@
       this.sandwich_0_record.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
       this.sandwich_0_record.Name = "sandwich_0_record";
       this.sandwich_0_record.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.sandwich_0_record.Size = new System.Drawing.Size(288, 64);
+      this.sandwich_0_record.Size = new System.Drawing.Size(288, 62);
       this.sandwich_0_record.TabIndex = 3;
       this.sandwich_0_record.TabStop = false;
       this.sandwich_0_record.Text = "Record";
@@ -664,7 +695,7 @@
       this.sandwich_0_record_flow.Location = new System.Drawing.Point(3, 13);
       this.sandwich_0_record_flow.Margin = new System.Windows.Forms.Padding(0);
       this.sandwich_0_record_flow.Name = "sandwich_0_record_flow";
-      this.sandwich_0_record_flow.Size = new System.Drawing.Size(282, 51);
+      this.sandwich_0_record_flow.Size = new System.Drawing.Size(282, 49);
       this.sandwich_0_record_flow.TabIndex = 0;
       // 
       // sandwich_0_record_filepath
@@ -725,7 +756,7 @@
       this.sandwich_0_advanced.MinimumSize = new System.Drawing.Size(100, 0);
       this.sandwich_0_advanced.Name = "sandwich_0_advanced";
       this.sandwich_0_advanced.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.sandwich_0_advanced.Size = new System.Drawing.Size(588, 64);
+      this.sandwich_0_advanced.Size = new System.Drawing.Size(588, 62);
       this.sandwich_0_advanced.TabIndex = 4;
       this.sandwich_0_advanced.TabStop = false;
       this.sandwich_0_advanced.Text = "Advanced";
@@ -747,7 +778,7 @@
       this.sandwich_0_advanced_table.Name = "sandwich_0_advanced_table";
       this.sandwich_0_advanced_table.RowCount = 1;
       this.sandwich_0_advanced_table.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.sandwich_0_advanced_table.Size = new System.Drawing.Size(582, 51);
+      this.sandwich_0_advanced_table.Size = new System.Drawing.Size(582, 49);
       this.sandwich_0_advanced_table.TabIndex = 0;
       // 
       // sandwich_0_advanced_hiddenFlow
@@ -765,28 +796,18 @@
       this.sandwich_0_advanced_hiddenFlow.Location = new System.Drawing.Point(102, 0);
       this.sandwich_0_advanced_hiddenFlow.Margin = new System.Windows.Forms.Padding(0);
       this.sandwich_0_advanced_hiddenFlow.Name = "sandwich_0_advanced_hiddenFlow";
-      this.sandwich_0_advanced_hiddenFlow.Size = new System.Drawing.Size(480, 51);
+      this.sandwich_0_advanced_hiddenFlow.Size = new System.Drawing.Size(480, 49);
       this.sandwich_0_advanced_hiddenFlow.TabIndex = 3;
       // 
-      // sandwich_0_advanced_ID_upDown
+      // sandwich_0_advanced_removeSandwich
       // 
-      this.sandwich_0_advanced_ID_upDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.sandwich_0_advanced_ID_upDown.Location = new System.Drawing.Point(3, 13);
-      this.sandwich_0_advanced_ID_upDown.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
-      this.sandwich_0_advanced_ID_upDown.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-      this.sandwich_0_advanced_ID_upDown.Name = "sandwich_0_advanced_ID_upDown";
-      this.sandwich_0_advanced_ID_upDown.Size = new System.Drawing.Size(45, 29);
-      this.sandwich_0_advanced_ID_upDown.TabIndex = 0;
-      this.sandwich_0_advanced_ID_upDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      this.sandwich_0_advanced_ID_upDown.Value = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
+      this.sandwich_0_advanced_removeSandwich.Location = new System.Drawing.Point(54, 11);
+      this.sandwich_0_advanced_removeSandwich.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
+      this.sandwich_0_advanced_removeSandwich.Name = "sandwich_0_advanced_removeSandwich";
+      this.sandwich_0_advanced_removeSandwich.Size = new System.Drawing.Size(60, 35);
+      this.sandwich_0_advanced_removeSandwich.TabIndex = 1;
+      this.sandwich_0_advanced_removeSandwich.Text = "Delete sandwich";
+      this.sandwich_0_advanced_removeSandwich.UseVisualStyleBackColor = true;
       // 
       // sandwich_0_advanced_port
       // 
@@ -855,16 +876,6 @@
       this.sandwich_0_advanced_thermocouple_label.Size = new System.Drawing.Size(75, 13);
       this.sandwich_0_advanced_thermocouple_label.TabIndex = 1;
       this.sandwich_0_advanced_thermocouple_label.Text = "Thermocouple\r\n";
-      // 
-      // sandwich_0_advanced_removeSandwich
-      // 
-      this.sandwich_0_advanced_removeSandwich.Location = new System.Drawing.Point(54, 11);
-      this.sandwich_0_advanced_removeSandwich.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
-      this.sandwich_0_advanced_removeSandwich.Name = "sandwich_0_advanced_removeSandwich";
-      this.sandwich_0_advanced_removeSandwich.Size = new System.Drawing.Size(60, 35);
-      this.sandwich_0_advanced_removeSandwich.TabIndex = 1;
-      this.sandwich_0_advanced_removeSandwich.Text = "Delete sandwich";
-      this.sandwich_0_advanced_removeSandwich.UseVisualStyleBackColor = true;
       // 
       // sandwich_0_advanced_oversampling
       // 
@@ -1027,7 +1038,7 @@
       this.mainFlow.Location = new System.Drawing.Point(0, 27);
       this.mainFlow.Margin = new System.Windows.Forms.Padding(0);
       this.mainFlow.Name = "mainFlow";
-      this.mainFlow.Size = new System.Drawing.Size(1887, 70);
+      this.mainFlow.Size = new System.Drawing.Size(1887, 68);
       this.mainFlow.TabIndex = 1;
       // 
       // sandwich_0
@@ -1050,7 +1061,7 @@
       this.sandwich_0.Name = "sandwich_0";
       this.sandwich_0.RowCount = 1;
       this.sandwich_0.RowStyles.Add(new System.Windows.Forms.RowStyle());
-      this.sandwich_0.Size = new System.Drawing.Size(1881, 64);
+      this.sandwich_0.Size = new System.Drawing.Size(1881, 62);
       this.sandwich_0.TabIndex = 20;
       // 
       // menu
@@ -1150,17 +1161,6 @@
       this.recordFileDialog.Filter = "CSV file|*.csv";
       this.recordFileDialog.Title = "File to save recorded data";
       // 
-      // sandwich_0_heat_maxRate
-      // 
-      this.sandwich_0_heat_maxRate.AutoSize = true;
-      this.sandwich_0_heat_maxRate.Location = new System.Drawing.Point(75, 3);
-      this.sandwich_0_heat_maxRate.Margin = new System.Windows.Forms.Padding(3, 3, 0, 0);
-      this.sandwich_0_heat_maxRate.Name = "sandwich_0_heat_maxRate";
-      this.sandwich_0_heat_maxRate.Size = new System.Drawing.Size(61, 43);
-      this.sandwich_0_heat_maxRate.TabIndex = 1;
-      this.sandwich_0_heat_maxRate.Text = "Max\r\nheating\r\nrate";
-      this.sandwich_0_heat_maxRate.UseVisualStyleBackColor = true;
-      // 
       // TDTSandwich
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1177,6 +1177,7 @@
       this.sandwich_0_ID.ResumeLayout(false);
       this.sandwich_0_ID.PerformLayout();
       this.sandwich_0_ID_flow.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).EndInit();
       this.sandwich_0_DAQ.ResumeLayout(false);
       this.sandwich_0_DAQ.PerformLayout();
       this.sandwich_0_DAQ_flow.ResumeLayout(false);
@@ -1216,7 +1217,6 @@
       this.sandwich_0_advanced_table.PerformLayout();
       this.sandwich_0_advanced_hiddenFlow.ResumeLayout(false);
       this.sandwich_0_advanced_hiddenFlow.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.sandwich_0_advanced_ID_upDown)).EndInit();
       this.sandwich_0_advanced_port.ResumeLayout(false);
       this.sandwich_0_advanced_port.PerformLayout();
       this.sandwich_0_advanced_thermocouple.ResumeLayout(false);
